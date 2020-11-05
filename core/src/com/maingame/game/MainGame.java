@@ -31,5 +31,3 @@ public class MainGame extends ApplicationAdapter {
 		img.dispose();
 	}
 }
-//OmarSilva
-//Okan
