@@ -31,3 +31,5 @@ public class MainGame extends ApplicationAdapter {
 		img.dispose();
 	}
 }
+
+//Craig changed this
