@@ -32,4 +32,3 @@ public class MainGame extends ApplicationAdapter {
 	}
 }
 //OmarSilva
-//Joel
