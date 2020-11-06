@@ -12,14 +12,14 @@ public class Boat {
     private int velocityX, velocityY, maneuverability, robustness, maxAcceleration, health = 100;
     private boolean isPlayer;
 
-    List<String> Available = new ArrayList<String>();
-    Available.add("red");
-    Available.add("pink");
-    Available.add("blue");
-    Available.add("yellow");
-    Available.add("orange");
-    Available.add("green");
-    Available.add("purple");
+    List<String> available = new ArrayList<String>();
+    available.add("red");
+    available.add("pink");
+    available.add("blue");
+    available.add("yellow");
+    available.add("orange");
+    available.add("green");
+    available.add("purple");
 
     HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
 
@@ -50,6 +50,7 @@ public class Boat {
         robustness = BoatMap.get(col)[1];
         maxAcceleration =  BoatMap.get(col)[2];
         img = BoatImg.get(col)[0];
+        available.remove(col);
     }
 
     public int getHealth(){
