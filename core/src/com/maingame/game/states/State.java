@@ -17,7 +17,7 @@ public abstract class State {
 		
 	}
 	
-	protected abstract void handleInput();
+	public abstract void handleInput();
 
 	public abstract void update(float dt);
 
