@@ -7,6 +7,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MainGame extends ApplicationAdapter {
+	public static final int WIDTH = 1366;
+	public static final int HEIGHT = 768;
+	public static final String TITLE = "Dragonite Dragon Boat Race";
+	
 	SpriteBatch batch;
 	Texture img;
 	
