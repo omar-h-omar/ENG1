@@ -8,14 +8,14 @@ public class MenuState extends State {
 	private Texture background;
 	private Texture playBtn;
 
-	protected MenuState(GameStateManager gsm) {
+	public MenuState(GameStateManager gsm) {
 		super(gsm);
 		background = new Texture("background.PNG");
 		playBtn = new Texture("play.PNG");
 	}
 
 	@Override
-	protected void handleInput() {
+	public void handleInput() {
 		
 	}
 	
