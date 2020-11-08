@@ -10,6 +10,7 @@ public class WelcomeState extends State {
 	private Texture background;
 	private Texture playBtn;
 	private Texture title;
+	private Texture advance;
 	
 
 	public WelcomeState(GameStateManager gsm) {
@@ -17,6 +18,7 @@ public class WelcomeState extends State {
 		background = new Texture("background.PNG");
 		playBtn = new Texture("play.PNG");
 		title = new Texture("title.PNG");
+		advance = new Texture("advance.PNG");
 	}
 
 	@Override
@@ -42,7 +44,8 @@ public class WelcomeState extends State {
 		sb.begin();
 		sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
 		sb.draw(playBtn, (MainGame.WIDTH / 3) - (playBtn.getWidth() / 10), MainGame.HEIGHT / 50);
-		sb.draw(title, (MainGame.WIDTH / 5) - (playBtn.getWidth() / 10), MainGame.HEIGHT / 50);
+		sb.draw(title, (MainGame.WIDTH / 5) - (title.getWidth() / 10), MainGame.HEIGHT / 50);
+		sb.draw(advance, (MainGame.WIDTH / 20) - (advance.getWidth() / 250), MainGame.HEIGHT / 50);
 		sb.end();
 	}
 	
