@@ -7,12 +7,14 @@ import com.maingame.game.MainGame;
 public class WelcomeState extends State {
 	private Texture background;
 	private Texture playBtn;
+	private Texture title;
 	
 
 	public WelcomeState(GameStateManager gsm) {
 		super(gsm);
 		background = new Texture("background.PNG");
 		playBtn = new Texture("play.PNG");
+		title = new Texture("title.PNG");
 	}
 
 	@Override
@@ -29,7 +31,8 @@ public class WelcomeState extends State {
 	public void render(SpriteBatch sb) {
 		sb.begin();
 		sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
-		sb.draw(playBtn, (MainGame.WIDTH / 3) - (playBtn.getWidth() / 10), MainGame.HEIGHT / 100);
+		sb.draw(playBtn, (MainGame.WIDTH / 3) - (playBtn.getWidth() / 10), MainGame.HEIGHT / 50);
+		sb.draw(title, (MainGame.WIDTH / 5) - (playBtn.getWidth() / 10), MainGame.HEIGHT / 50);
 		sb.end();
 	}
 	
