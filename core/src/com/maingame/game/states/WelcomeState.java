@@ -7,6 +7,7 @@ import com.maingame.game.MainGame;
 public class WelcomeState extends State {
 	private Texture background;
 	private Texture playBtn;
+	
 
 	public WelcomeState(GameStateManager gsm) {
 		super(gsm);
