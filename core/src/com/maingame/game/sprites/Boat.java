@@ -31,7 +31,7 @@ public class Boat {
         img = BoatImg.get(col)[0];
 //        available.remove(col);
     }
-//  TODO: Add the attributes for each boat like velocity, ..etc in boatMap
+//  TODO: Add the attributes for each boat like velocity, ..etc boatMap
 //  Builds the hashmaps for the boat data.
 //  BoatImg contains the images for the boats in an array of strings. The strings are the file names of the images.
 //  BoatMap contains the attributes for each boat in an array of integers.
