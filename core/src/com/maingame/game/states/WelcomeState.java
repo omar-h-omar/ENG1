@@ -10,7 +10,7 @@ public class WelcomeState extends State {
 
 	public WelcomeState(GameStateManager gsm) {
 		super(gsm);
-		background = new Texture("river.PNG");
+		background = new Texture("background.PNG");
 		playBtn = new Texture("play.PNG");
 	}
 
@@ -31,6 +31,7 @@ public class WelcomeState extends State {
 		sb.draw(playBtn, (MainGame.WIDTH / 3) - (playBtn.getWidth() / 10), MainGame.HEIGHT / 100);
 		sb.end();
 	}
+	
 
 	@Override
 	public void dispose() {
