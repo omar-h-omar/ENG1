@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.maingame.game.states.GameStateManager;
-import com.maingame.game.states.MenuState;
+import com.maingame.game.states.WelcomeState;
 
 public class MainGame extends ApplicationAdapter {
 	public static final int WIDTH = 1366;
@@ -20,7 +20,7 @@ public class MainGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
-		gsm.push(new MenuState(gsm));
+		gsm.push(new WelcomeState(gsm));
 	}
 
 	@Override

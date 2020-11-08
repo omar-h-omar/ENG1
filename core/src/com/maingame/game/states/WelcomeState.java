@@ -10,7 +10,7 @@ public class WelcomeState extends State {
 
 	public WelcomeState(GameStateManager gsm) {
 		super(gsm);
-		background = new Texture("background.PNG");
+		background = new Texture("river.PNG");
 		playBtn = new Texture("play.PNG");
 	}
 
@@ -28,7 +28,7 @@ public class WelcomeState extends State {
 	public void render(SpriteBatch sb) {
 		sb.begin();
 		sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
-		sb.draw(playBtn, (MainGame.WIDTH / 2) - (playBtn.getWidth() / 2), MainGame.HEIGHT / 2);
+		sb.draw(playBtn, (MainGame.WIDTH / 3) - (playBtn.getWidth() / 10), MainGame.HEIGHT / 100);
 		sb.end();
 	}
 
