@@ -7,10 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.maingame.game.MainGame;
 
 public class WelcomeState extends State {
-	private Texture background;
-	private Texture playBtn;
-	private Texture title;
-	private Texture advance;
+	private final Texture background;
+	private final Texture playBtn;
+	private final Texture title;
+	private final Texture advance;
 	
 
 	public WelcomeState(GameStateManager gsm) {
