@@ -1,6 +1,7 @@
 package com.maingame.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.maingame.game.MainGame;
 import com.maingame.game.sprites.Boat;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,26 +17,17 @@ public class MenuState extends State {
 	private final Texture background;
 	private final Texture leftArrow;
 	private final Texture rightArrow;
-	private final Texture speed;
-	private final Texture robustness;
-	private final Texture maneuverability;
-	private final Texture acceleration;
 	private List<Boat> boats = new ArrayList<Boat>();
 	private int x; // current boat index
 	private Rectangle rightBounds; // a rectangle around the right arrow.
 	private Rectangle leftBounds; // a rectangle around the left arrow.
-	private BitmapFont font = new BitmapFont(); // a font to draw text
+	private BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
 //	TODO: Finish font to draw text
 	public MenuState(GameStateManager gsm) {
 		super(gsm);
 		background = new Texture("background.PNG");
 		leftArrow = new Texture("leftArrow.png");
 		rightArrow = new Texture("rightArrow.png");
-		speed = new Texture("speed.png");
-		robustness = new Texture("robustness.png");
-		maneuverability = new Texture("maneuverability.png");
-		acceleration = new Texture("acceleration.png");
-		font.getData().setScale(200);
 		this.buildBoats();
 		rightBounds = new Rectangle((MainGame.WIDTH/2) + 50,MainGame.HEIGHT/2 + 50,200,200);
 		leftBounds = new Rectangle((MainGame.WIDTH/2) - 250,MainGame.HEIGHT/2 + 50,200,200);
@@ -81,11 +74,14 @@ public class MenuState extends State {
 		sb.draw(img,(MainGame.WIDTH/2) - 100,MainGame.HEIGHT/2 + 50,200,200);
 		sb.draw(rightArrow,(MainGame.WIDTH/2) + 50 ,MainGame.HEIGHT/2 + 50,200,200);
 		sb.draw(leftArrow,(MainGame.WIDTH/2) - 250 ,MainGame.HEIGHT/2 + 50,200,200);
-		sb.draw(speed,100,250,speed.getWidth()/5,speed.getHeight()/5);
-		font.draw(sb,"test",0,0);
-		sb.draw(acceleration,100,200,speed.getWidth()/5,speed.getHeight()/5);
-		sb.draw(robustness,100,150,speed.getWidth()/5,speed.getHeight()/5);
-		sb.draw(maneuverability,100,100,speed.getWidth()/5,speed.getHeight()/5);
+		font.draw(sb,"Speed: ",100,250);
+		font.draw(sb,"Acceleration: ",100,200);
+		font.draw(sb,"Robustness: ",100,150);
+		font.draw(sb,"maneuverability: ",100,100);
+		font.draw(sb,Integer.toString(boats.get(0).speed),550,250);
+		font.draw(sb,Integer.toString(boats.get(0).acceleration),550,200);
+		font.draw(sb,Integer.toString(boats.get(0).robustness),550,150);
+		font.draw(sb,Integer.toString(boats.get(0).maneuverability),550,100);
 		sb.end();
 	}
 
@@ -94,10 +90,6 @@ public class MenuState extends State {
 		background.dispose();
 		rightArrow.dispose();
 		leftArrow.dispose();
-		speed.dispose();
-		acceleration.dispose();
-		robustness.dispose();
-		maneuverability.dispose();
 		font.dispose();
 	}
 }
