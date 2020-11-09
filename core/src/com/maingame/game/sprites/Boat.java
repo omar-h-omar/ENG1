@@ -7,7 +7,7 @@ public class Boat {
     //Attributes
     public String colour, img;
     private Rectangle bounds;
-    private int speed, maneuverability, robustness, acceleration, health = 100;
+    public int speed, maneuverability, robustness, acceleration, health = 100;
     private boolean isPlayer;
     private HashMap<String, String[]> BoatImg = new HashMap<String, String[]>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
@@ -26,6 +26,7 @@ public class Boat {
 //  Builds the hashmaps for the boat data.
 //  BoatImg contains the images for the boats in an array of strings. The strings are the file names of the images.
 //  BoatMap contains the attributes for each boat in an array of integers.
+//  0 for speed 1 for acceleration 2 robustness 3 maneuverability
     private void buildBoatData() {
         String[] arr = {"Boat1.1.png", "Boat1.2.png"};
         BoatImg.put("red", arr);
@@ -44,11 +45,17 @@ public class Boat {
 
         Integer[] arr2 = {10,10,10,10};
         BoatMap.put("red", arr2);
+        arr2 = new Integer[]{9, 9, 9, 9};
         BoatMap.put("pink", arr2);
+        arr2 = new Integer[]{8, 8, 8, 8};
         BoatMap.put("blue", arr2);
+        arr2 = new Integer[]{7, 7, 7, 7};
         BoatMap.put("yellow", arr2);
+        arr2 = new Integer[]{6, 6, 6, 6};
         BoatMap.put("orange", arr2);
+        arr2 = new Integer[]{5, 5, 5, 5};
         BoatMap.put("green", arr2);
+        arr2 = new Integer[]{4, 4, 4, 4};
         BoatMap.put("purple", arr2);
     }
 
@@ -59,9 +66,5 @@ public class Boat {
     public void setHealth(int h){
         health = h;
     }
-
-//    public boolean collide(object obj){
-//        return false;
-//    }
 
 }
