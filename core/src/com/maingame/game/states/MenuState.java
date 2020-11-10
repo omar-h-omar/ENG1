@@ -1,6 +1,7 @@
 package com.maingame.game.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -19,9 +20,10 @@ public class MenuState extends State {
 	private final Texture wasd;
 	private List<Boat> boats = new ArrayList<Boat>();
 	private int x; // current boat index
-	private Rectangle rightBounds; // a rectangle around the right arrow used for detecting a click.
-	private Rectangle leftBounds; // a rectangle around the left arrow used for detecting a click.
-	private BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
+	private final Rectangle rightBounds; // a rectangle around the right arrow used for detecting a click.
+	private final Rectangle leftBounds; // a rectangle around the left arrow used for detecting a click.
+	private final Rectangle btnBounds;
+	private final BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
 
 	public MenuState(GameStateManager gsm) {
 		super(gsm);
@@ -34,6 +36,7 @@ public class MenuState extends State {
 		this.buildBoats();
 		rightBounds = new Rectangle(350,MainGame.HEIGHT/2 + 50,200,200);
 		leftBounds = new Rectangle(50,MainGame.HEIGHT/2 + 50,200,200);
+		btnBounds = new Rectangle(MainGame.WIDTH - 300 - 100,0,300,300);
 		x = 0;
 	}
 
@@ -47,7 +50,7 @@ public class MenuState extends State {
 		boats.add(new Boat("green"));
 		boats.add(new Boat("purple"));
 	}
-//	TODO: Add a transition to the PlayState when the player presses a button.
+
 //	Checks what is being clicked on the screen and applies changes.
 	@Override
 	public void handleInput() {
@@ -56,7 +59,15 @@ public class MenuState extends State {
 				x+= 1;
 			}else if (leftBounds.contains(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY())){
 				x -= 1;
+			}else if (btnBounds.contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+				gsm.set(new PlayState(gsm,boats, boats.get(x)));
 			}
+		}else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+			x += 1;
+		}else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+			x -= 1;
+		}else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))){
+			gsm.set(new PlayState(gsm,boats,boats.get(x)));
 		}
 		if (x < 0) {
 			x = 0;
@@ -98,6 +109,9 @@ public class MenuState extends State {
 		background.dispose();
 		rightArrow.dispose();
 		leftArrow.dispose();
+		playBtn.dispose();
+		arrows.dispose();
+		wasd.dispose();
 		font.dispose();
 	}
 }

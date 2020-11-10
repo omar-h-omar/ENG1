@@ -52,7 +52,10 @@ public class WelcomeState extends State {
 
 	@Override
 	public void dispose() {
-		
+		background.dispose();
+		playBtn.dispose();
+		title.dispose();
+		advance.dispose();
 	}
 }
 
