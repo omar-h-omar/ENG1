@@ -39,7 +39,7 @@ public class PlayState extends State{
 
     @Override
     public void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W) || (Gdx.input.isKeyPressed(Input.Keys.UP))){
+        if (Gdx.input.isKeyPressed(Input.Keys.W) || (Gdx.input.isKeyPressed(Input.Keys.UP))){
             player.PosY += player.speed;
             cam.position.y += player.speed;
         }
