@@ -14,7 +14,7 @@ public class Boat {
     public int speed, maneuverability, robustness, acceleration, health = 100,PosX,PosY;
     private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
-
+    public float leftBound, rightBound;
 
     public Boat(String col){
         this.buildBoatData();
@@ -26,6 +26,8 @@ public class Boat {
         PosX = BoatMap.get(col)[4];
         PosY = BoatMap.get(col)[5];
         images = BoatImg.get(col);
+        leftBound = 0;
+        rightBound = 0;
     }
 //  TODO: Change the values for the boats.
 //  Builds the hashmaps for the boat data.
@@ -90,6 +92,21 @@ public class Boat {
         BoatMap.put("green", arr2);
         arr2 = new Integer[]{4, 4, 4, 4,0,0};
         BoatMap.put("purple", arr2);
+    }
+    // Checks if a boat is outside of its lane and decreases its health
+    public void isBoatOutOfLane() {
+        if( PosX < leftBound || PosX > rightBound) {
+            if (health - 0.00000005 < 0) {
+                health = 0;
+            }else {
+                health -= 0.00000005;
+            }
+        }
+    }
+    // Changes lane boundaries for a boat
+    public void setBounds(float leftBound, float rightBound){
+        this.leftBound = leftBound;
+        this.rightBound = rightBound;
     }
 
     public int getHealth(){
