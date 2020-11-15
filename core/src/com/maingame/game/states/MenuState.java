@@ -10,6 +10,7 @@ import com.maingame.game.MainGame;
 import com.maingame.game.sprites.Boat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MenuState extends State {
 	private final Texture background;
@@ -51,6 +52,17 @@ public class MenuState extends State {
 		boats.add(new Boat("purple"));
 	}
 
+	private List<Boat> PlayStateBoats(Boat player) {
+		List<Boat> output = new ArrayList<Boat>();
+		for (int i = 0; i < 4; i++) {
+			Random generator = new Random();
+			Boat boat = this.boats.get(generator.nextInt(this.boats.size() - 1));
+			output.add(boat);
+			this.boats.remove(boat);
+		}
+		return output;
+	}
+
 //	Checks what is being clicked on the screen and applies changes.
 	@Override
 	public void handleInput() {
@@ -60,14 +72,20 @@ public class MenuState extends State {
 			}else if (leftBounds.contains(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY())){
 				x -= 1;
 			}else if (btnBounds.contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
-				gsm.set(new PlayState(gsm,boats, boats.get(x)));
+				Boat playerBoat = boats.get(x);
+				this.boats.remove(x);
+				this.boats = PlayStateBoats(playerBoat);
+				gsm.set(new PlayState(gsm,boats, playerBoat,1));
 			}
 		}else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
 			x += 1;
 		}else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
 			x -= 1;
 		}else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))){
-			gsm.set(new PlayState(gsm,boats,boats.get(x)));
+			Boat playerBoat = boats.get(x);
+			this.boats.remove(x);
+			this.boats = PlayStateBoats(playerBoat);
+			gsm.set(new PlayState(gsm,boats, playerBoat,1));
 		}
 		if (x < 0) {
 			x = 0;
@@ -85,7 +103,7 @@ public class MenuState extends State {
 	public void render(SpriteBatch sb) {
 		sb.begin();
 		sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
-		Texture img = new Texture(boats.get(x).img);
+		Texture img = boats.get(x).images.get(0);
 		sb.draw(img,200,MainGame.HEIGHT/2 + 50,200,200);
 		sb.draw(rightArrow,350 ,MainGame.HEIGHT/2 + 50,200,200);
 		sb.draw(leftArrow,50 ,MainGame.HEIGHT/2 + 50,200,200);

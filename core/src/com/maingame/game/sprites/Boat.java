@@ -7,7 +7,7 @@ public class Boat {
     //Attributes
     public String colour, img;
     private Rectangle bounds;
-    public int speed, maxSpeed, maneuverability, robustness, acceleration, health = 100;
+    public int speed, maneuverability, robustness, acceleration, health = 100;
     private boolean isPlayer;
     private HashMap<String, String[]> BoatImg = new HashMap<String, String[]>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
@@ -61,10 +61,6 @@ public class Boat {
 
     public int getHealth(){
         return health;
-    }
-
-    public int getSpeed(){
-        return maxSpeed;
     }
 
     public void setHealth(int h){
