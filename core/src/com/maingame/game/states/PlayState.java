@@ -23,6 +23,7 @@ public class PlayState extends State{
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
     private Pixmap healthMap, healthMap2; // a map to render the health bar.
     private Pixmap fatigueMap, fatigueMap2; // a map to render the fatigue bar.
+    private Pixmap penaltyMap, penaltyMap2; // a map to render the penalty bar.
 //    private Pixmap eMap, fatigueMap2; // a map to render the fatigue bar.
 
     public PlayState(GameStateManager gsm, List<Boat> boats,Boat player,int leg){
@@ -33,14 +34,20 @@ public class PlayState extends State{
         healthMap2 = new Pixmap(210,40, Pixmap.Format.RGBA8888);
         fatigueMap = new Pixmap(200,30, Pixmap.Format.RGBA8888);
         fatigueMap2 = new Pixmap(210,40, Pixmap.Format.RGBA8888);
+        penaltyMap = new Pixmap(200,30, Pixmap.Format.RGBA8888);
+        penaltyMap2 = new Pixmap(210,40, Pixmap.Format.RGBA8888);
         healthMap.setColor(Color.valueOf("345830"));
         healthMap2.setColor(Color.valueOf("eeeded"));
         fatigueMap.setColor(Color.valueOf("345830"));
         fatigueMap2.setColor(Color.valueOf("eeeded"));
+        penaltyMap.setColor(Color.valueOf("345830"));
+        penaltyMap2.setColor(Color.valueOf("eeeded"));
         healthMap.fill();
         healthMap2.fill();
         fatigueMap.fill();
         fatigueMap2.fill();
+        penaltyMap.fill();
+        penaltyMap2.fill();
         this.leg = leg;
         this.boats = boats;
         this.player = player;
@@ -72,13 +79,14 @@ public class PlayState extends State{
             player.PosX += player.maneuverability/2;
         }
         // remove once collisions are implemented
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)){
-            if (player.health -1 < 0){
-                player.health = 0;
+        if (Gdx.input.isKeyPressed(Input.Keys.W)){
+            if (player.fatigue -1 < 0){
+                player.fatigue = 0;
             }else {
-            player.health -= 1;
+            player.fatigue -= 1;
             }
         }
+        
         cam.update();
     }
 
@@ -126,7 +134,7 @@ public class PlayState extends State{
         }
         Texture pix2 = new Texture(healthMap2);
         Texture pix = new Texture(healthMap);
-        font.draw(sb,"Health: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 358);
+        font.draw(sb,"Fatigue: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 358);
         sb.draw(pix2,cam.position.x/2 - pix2.getWidth() ,cam.position.y + 310);
         int healthBar = (player.health * 200)/100;
         sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 315,healthBar,30);
@@ -136,9 +144,18 @@ public class PlayState extends State{
         sb.draw(pix2,cam.position.x/2 - pix2.getWidth() ,cam.position.y + 260);
         int fatigueBar = (player.health * 200)/100;
         sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 265,fatigueBar,30);
+        pix2 = new Texture(penaltyMap2);
+        pix = new Texture (penaltyMap);
+        font.draw(sb, "Penalty: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 260);
+        sb.draw(pix2, cam.position.x/2 - pix2.getWidth(), cam.position.y + 212);
+        int penaltyBar = (player.penalty * 200)/100;
+        sb.draw(pix, cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 217, penaltyBar, 30);
+        
+        
+        
 
         if (time != 0){
-        font.draw(sb,"Time: " + (System.currentTimeMillis() - time)/1000 ,cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 260);
+        font.draw(sb,"Time: " + (System.currentTimeMillis() - time)/1000 ,cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 210);
         }
         sb.end();
     }
@@ -172,14 +189,22 @@ public class PlayState extends State{
         }else if (player.health <= 75){
             healthMap.setColor(Color.valueOf("F2BB05"));
         }
-        if (player.health <= 25){
+        if (player.fatigue <= 25){
             fatigueMap.setColor(Color.valueOf("823038"));
-        }else if (player.health <=50){
+        }else if (player.fatigue <=50){
             fatigueMap.setColor(Color.valueOf("F95738"));
-        }else if (player.health <= 75){
+        }else if (player.fatigue <= 75){
             fatigueMap.setColor(Color.valueOf("F2BB05"));
+        }
+        if (player.penalty <= 25){
+            healthMap.setColor(Color.valueOf("823038"));
+        }else if (player.penalty <=50){
+            healthMap.setColor(Color.valueOf("F95738"));
+        }else if (player.penalty <= 75){
+            healthMap.setColor(Color.valueOf("F2BB05"));
         }
         healthMap.fill();
         fatigueMap.fill();
+        penaltyMap.fill();
     }
 }
