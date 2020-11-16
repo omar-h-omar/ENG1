@@ -17,21 +17,30 @@ public class PlayState extends State{
     private Texture boat;
     private List<Boat> boats;
     private int leg;
+    private long time;
     private Boat player;
     private float riverPos1, riverPos2; // A tracker for the positions of the river assets
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
-    private Pixmap pixmap, pixmap2; // a map to render the health bar.
+    private Pixmap healthMap, healthMap2; // a map to render the health bar.
+    private Pixmap fatigueMap, fatigueMap2; // a map to render the fatigue bar.
+//    private Pixmap eMap, fatigueMap2; // a map to render the fatigue bar.
 
     public PlayState(GameStateManager gsm, List<Boat> boats,Boat player,int leg){
         super(gsm);
         river = new Texture("river.png");
         riverReversed = new Texture("river_reversed.png");
-        pixmap = new Pixmap(200,30, Pixmap.Format.RGBA8888);
-        pixmap2 = new Pixmap(210,40, Pixmap.Format.RGBA8888);
-        pixmap2.setColor(Color.valueOf("eeeded"));
-        pixmap.setColor(Color.valueOf("345830"));
-        pixmap2.fill();
-        pixmap.fill();
+        healthMap = new Pixmap(200,30, Pixmap.Format.RGBA8888);
+        healthMap2 = new Pixmap(210,40, Pixmap.Format.RGBA8888);
+        fatigueMap = new Pixmap(200,30, Pixmap.Format.RGBA8888);
+        fatigueMap2 = new Pixmap(210,40, Pixmap.Format.RGBA8888);
+        healthMap.setColor(Color.valueOf("345830"));
+        healthMap2.setColor(Color.valueOf("eeeded"));
+        fatigueMap.setColor(Color.valueOf("345830"));
+        fatigueMap2.setColor(Color.valueOf("eeeded"));
+        healthMap.fill();
+        healthMap2.fill();
+        fatigueMap.fill();
+        fatigueMap2.fill();
         this.leg = leg;
         this.boats = boats;
         this.player = player;
@@ -52,6 +61,9 @@ public class PlayState extends State{
         if (Gdx.input.isKeyPressed(Input.Keys.W) || (Gdx.input.isKeyPressed(Input.Keys.UP))){
             player.PosY += player.speed;
             cam.position.y += player.speed;
+            if (time == 0){
+            time = System.currentTimeMillis();
+            }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             player.PosX -= player.maneuverability/2;
@@ -75,6 +87,7 @@ public class PlayState extends State{
         handleInput();
         updateRiver();
         boatsOutOfBounds();
+        updateMapColour();
     }
 
     @Override
@@ -111,22 +124,22 @@ public class PlayState extends State{
             boat.setBounds(river.getWidth()*4-50,river.getWidth()*5-50);
             sb.draw(boat.images.get(0), boat.PosX,boat.PosY,100,100);
         }
-
-        // Controls the colour of the health bar
-        if (player.health <= 25){
-            pixmap.setColor(Color.valueOf("823038"));
-        }else if (player.health <=50){
-            pixmap.setColor(Color.valueOf("F95738"));
-        }else if (player.health <= 75){
-            pixmap.setColor(Color.valueOf("F2BB05"));
-        }
-        pixmap.fill();
-        Texture pix2 = new Texture(pixmap2);
-        Texture pix = new Texture(pixmap);
+        Texture pix2 = new Texture(healthMap2);
+        Texture pix = new Texture(healthMap);
         font.draw(sb,"Health: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 358);
         sb.draw(pix2,cam.position.x/2 - pix2.getWidth() ,cam.position.y + 310);
         int healthBar = (player.health * 200)/100;
         sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 315,healthBar,30);
+        pix2 = new Texture(fatigueMap2);
+        pix = new Texture(fatigueMap);
+        font.draw(sb,"Health: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 308);
+        sb.draw(pix2,cam.position.x/2 - pix2.getWidth() ,cam.position.y + 260);
+        int fatigueBar = (player.health * 200)/100;
+        sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 265,fatigueBar,30);
+
+        if (time != 0){
+        font.draw(sb,"Time: " + (System.currentTimeMillis() - time)/1000 ,cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 260);
+        }
         sb.end();
     }
 
@@ -148,5 +161,25 @@ public class PlayState extends State{
             boats.get(i).isBoatOutOfLane();
         }
         player.isBoatOutOfLane();
+    }
+
+    // Controls the colour of the bars
+    private void updateMapColour() {
+        if (player.health <= 25){
+            healthMap.setColor(Color.valueOf("823038"));
+        }else if (player.health <=50){
+            healthMap.setColor(Color.valueOf("F95738"));
+        }else if (player.health <= 75){
+            healthMap.setColor(Color.valueOf("F2BB05"));
+        }
+        if (player.health <= 25){
+            fatigueMap.setColor(Color.valueOf("823038"));
+        }else if (player.health <=50){
+            fatigueMap.setColor(Color.valueOf("F95738"));
+        }else if (player.health <= 75){
+            fatigueMap.setColor(Color.valueOf("F2BB05"));
+        }
+        healthMap.fill();
+        fatigueMap.fill();
     }
 }

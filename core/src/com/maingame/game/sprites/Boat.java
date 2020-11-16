@@ -11,7 +11,7 @@ public class Boat {
     public String colour;
     public List<Texture> images;
     private Rectangle bounds;
-    public int speed, maneuverability, robustness, acceleration, health = 100,PosX,PosY;
+    public int speed, maneuverability, robustness, acceleration, health = 100,PosX,PosY,time;
     private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
     public float leftBound, rightBound;
