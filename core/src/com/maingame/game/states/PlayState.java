@@ -78,7 +78,6 @@ public class PlayState extends State{
         if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
             player.PosX += player.maneuverability/2;
         }
-        // remove once collisions are implemented
         if (Gdx.input.isKeyPressed(Input.Keys.W)){
             if (player.fatigue -1 < 0){
                 player.fatigue = 0;
@@ -132,18 +131,18 @@ public class PlayState extends State{
             boat.setBounds(river.getWidth()*4-50,river.getWidth()*5-50);
             sb.draw(boat.images.get(0), boat.PosX,boat.PosY,100,100);
         }
-        Texture pix2 = new Texture(healthMap2);
-        Texture pix = new Texture(healthMap);
+        Texture pix2 = new Texture(fatigueMap2);
+        Texture pix = new Texture(fatigueMap);
         font.draw(sb,"Fatigue: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 358);
         sb.draw(pix2,cam.position.x/2 - pix2.getWidth() ,cam.position.y + 310);
-        int healthBar = (player.health * 200)/100;
-        sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 315,healthBar,30);
-        pix2 = new Texture(fatigueMap2);
-        pix = new Texture(fatigueMap);
+        int fatigueBar = (player.fatigue * 200)/100;
+        sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 315,fatigueBar,30);
+        pix2 = new Texture(healthMap2);
+        pix = new Texture(healthMap);
         font.draw(sb,"Health: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 308);
         sb.draw(pix2,cam.position.x/2 - pix2.getWidth() ,cam.position.y + 260);
-        int fatigueBar = (player.health * 200)/100;
-        sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 265,fatigueBar,30);
+        int healthBar = (player.health * 200)/100;
+        sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 265,healthBar,30);
         pix2 = new Texture(penaltyMap2);
         pix = new Texture (penaltyMap);
         font.draw(sb, "Penalty: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 260);
@@ -197,11 +196,13 @@ public class PlayState extends State{
             fatigueMap.setColor(Color.valueOf("F2BB05"));
         }
         if (player.penalty <= 25){
-            healthMap.setColor(Color.valueOf("823038"));
+            penaltyMap.setColor(Color.valueOf("823038"));
         }else if (player.penalty <=50){
-            healthMap.setColor(Color.valueOf("F95738"));
+            penaltyMap.setColor(Color.valueOf("F95738"));
         }else if (player.penalty <= 75){
-            healthMap.setColor(Color.valueOf("F2BB05"));
+            penaltyMap.setColor(Color.valueOf("F2BB05"));
+        }else {
+            penaltyMap.setColor(Color.valueOf("345830"));
         }
         healthMap.fill();
         fatigueMap.fill();

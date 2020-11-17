@@ -11,7 +11,7 @@ public class Boat {
     public String colour;
     public List<Texture> images;
     private Rectangle bounds;
-    public int speed, maneuverability, robustness, acceleration, health, penalty = 100, fatigue = 100,PosX,PosY,time;
+    public int speed, maneuverability, robustness, acceleration, health=100, penalty = 100, fatigue = 100,PosX,PosY,time;
     private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
     public float leftBound, rightBound;
@@ -100,6 +100,10 @@ public class Boat {
                 penalty = 0;
             }else {
                 penalty -= 0.00000005;
+            }
+        }else {
+            if (penalty > 0) {
+                penalty = 100;
             }
         }
     }
