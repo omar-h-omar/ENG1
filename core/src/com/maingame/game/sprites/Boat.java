@@ -11,7 +11,7 @@ public class Boat {
     public String colour;
     public List<Texture> images;
     private Rectangle bounds;
-    public int speed, maneuverability, robustness, acceleration, health = 100,PosX,PosY;
+    public int speed, maneuverability, robustness, acceleration, health=100, penalty = 100, fatigue = 100,PosX,PosY,time;
     private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
     public float leftBound, rightBound;
@@ -93,14 +93,17 @@ public class Boat {
         arr2 = new Integer[]{4, 4, 4, 4,0,0};
         BoatMap.put("purple", arr2);
     }
-
-    // Checks if a boat is outside of its lane and decreases its health
+    // Checks if boat is outside its lane and decreases time allowed until a penalty
     public void isBoatOutOfLane() {
         if( PosX < leftBound || PosX > rightBound) {
-            if (health - 0.00000005 < 0) {
-                health = 0;
+            if (penalty - 0.00000005 < 0) {
+                penalty = 0;
             }else {
-                health -= 0.00000005;
+                penalty -= 0.00000005;
+            }
+        }else {
+            if (penalty > 0) {
+                penalty = 100;
             }
         }
     }
@@ -125,7 +128,7 @@ public class Boat {
     public void setFatigue(int f){
         fatigue = f;
     }
-
+    
     public int getHealth(){
         return health;
     }
