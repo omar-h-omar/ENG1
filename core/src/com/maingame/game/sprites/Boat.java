@@ -10,11 +10,13 @@ public class Boat {
     //Attributes
     public String colour;
     public List<Texture> images;
-    private Rectangle bounds;
-    public int speed, maneuverability, robustness, acceleration, health=100, penalty = 100, fatigue = 100,PosX,PosY,time;
+    public Rectangle collisionBounds;
+    public int speed, maneuverability, robustness, acceleration, timePenalty,health=100, penaltyBar = 100, fatigue = 300,PosX,PosY;
     private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
     public float leftBound, rightBound;
+    private float maxFrameTime, currentFrameTime;
+    public int frame;
 
     public Boat(String col){
         this.buildBoatData();
@@ -28,6 +30,10 @@ public class Boat {
         images = BoatImg.get(col);
         leftBound = 0;
         rightBound = 0;
+        timePenalty = 0;
+        frame = 0;
+        maxFrameTime = 0.5f/2;
+        collisionBounds = new Rectangle(PosX,PosY,80,80);
     }
 //  TODO: Change the values for the boats.
 //  Builds the hashmaps for the boat data.
@@ -96,14 +102,14 @@ public class Boat {
     // Checks if boat is outside its lane and decreases time allowed until a penalty
     public void isBoatOutOfLane() {
         if( PosX < leftBound || PosX > rightBound) {
-            if (penalty - 0.00000005 < 0) {
-                penalty = 0;
+            if (penaltyBar - 0.00000005 < 0) {
+                penaltyBar = 0;
             }else {
-                penalty -= 0.00000005;
+                penaltyBar -= 0.00000005;
             }
         }else {
-            if (penalty > 0) {
-                penalty = 100;
+            if (penaltyBar > 0) {
+                penaltyBar = 100;
             }
         }
     }
@@ -113,28 +119,14 @@ public class Boat {
         this.rightBound = rightBound;
     }
 
-    public int getPenalty(){
-        return penalty;
+    public void update(float dt) {
+        currentFrameTime += dt;
+        if (currentFrameTime > maxFrameTime) {
+            frame ++;
+            currentFrameTime = 0;
+        }
+        if (frame >= 2) {
+            frame = 0;
+        }
     }
-
-    public void setPenalty(int p){
-        penalty = p;
-    }
-
-    public int getFatigue(){
-        return fatigue;
-    }
-
-    public void setFatigue(int f){
-        fatigue = f;
-    }
-    
-    public int getHealth(){
-        return health;
-    }
-
-    public void setHealth(int h){
-        health = h;
-    }
-
 }
