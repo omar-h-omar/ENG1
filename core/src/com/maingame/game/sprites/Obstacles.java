@@ -3,7 +3,6 @@ package com.maingame.game.sprites;
 import com.badlogic.gdx.graphics.Texture;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import com.badlogic.gdx.math.Rectangle;
 
@@ -37,11 +36,13 @@ public class Obstacles {
 
     public void checkHit(Boat boat) {
         if (collisionBounds.overlaps(boat.collisionBounds)){
-//            System.out.println("Collision Detected");
             boat.health -= 5;
             posX = -9000;
             posY = -9000;
             collisionBounds.setPosition(posX,posY);
+            if (boat.health < 0) {
+                boat.health = 0;
+            }
         }
     }
 
@@ -69,7 +70,6 @@ public class Obstacles {
     }
     public void moveObstacle() {
         if (isMovable) {
-            Random generator = new Random();
             if (direction){
                 posX += 1;
             }else {
