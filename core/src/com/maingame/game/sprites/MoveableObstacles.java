@@ -8,10 +8,6 @@ public class MoveableObstacles extends Obstacles{
         super(n);
     }
 
-    public void move(){
 
-        setPosition(posX + velocity, posY);
-
-    }
 }
 

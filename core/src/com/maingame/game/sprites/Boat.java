@@ -10,8 +10,8 @@ public class Boat {
     //Attributes
     public String colour;
     public List<Texture> images;
-    private Rectangle bounds;
-    public int speed, maneuverability, robustness, acceleration, health=100, penalty = 100, fatigue = 100,PosX,PosY,time;
+    public Rectangle collisionBounds;
+    public int speed, maneuverability, robustness, acceleration, timePenalty,health=100, penaltyBar = 100, fatigue = 100,PosX,PosY;
     private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
     public float leftBound, rightBound;
@@ -28,6 +28,8 @@ public class Boat {
         images = BoatImg.get(col);
         leftBound = 0;
         rightBound = 0;
+        timePenalty = 0;
+        collisionBounds = new Rectangle(PosX,PosY,80,80);
     }
 //  TODO: Change the values for the boats.
 //  Builds the hashmaps for the boat data.
@@ -96,14 +98,14 @@ public class Boat {
     // Checks if boat is outside its lane and decreases time allowed until a penalty
     public void isBoatOutOfLane() {
         if( PosX < leftBound || PosX > rightBound) {
-            if (penalty - 0.00000005 < 0) {
-                penalty = 0;
+            if (penaltyBar - 0.00000005 < 0) {
+                penaltyBar = 0;
             }else {
-                penalty -= 0.00000005;
+                penaltyBar -= 0.00000005;
             }
         }else {
-            if (penalty > 0) {
-                penalty = 100;
+            if (penaltyBar > 0) {
+                penaltyBar = 100;
             }
         }
     }
@@ -113,12 +115,12 @@ public class Boat {
         this.rightBound = rightBound;
     }
 
-    public int getPenalty(){
-        return penalty;
+    public int getPenaltyBar(){
+        return penaltyBar;
     }
 
-    public void setPenalty(int p){
-        penalty = p;
+    public void setPenaltyBar(int p){
+        penaltyBar = p;
     }
 
     public int getFatigue(){
