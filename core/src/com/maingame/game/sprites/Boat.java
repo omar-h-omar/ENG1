@@ -11,10 +11,12 @@ public class Boat {
     public String colour;
     public List<Texture> images;
     public Rectangle collisionBounds;
-    public int speed, maneuverability, robustness, acceleration, timePenalty,health=100, penaltyBar = 100, fatigue = 100,PosX,PosY;
+    public int speed, maneuverability, robustness, acceleration, timePenalty,health=100, penaltyBar = 100, fatigue = 300,PosX,PosY;
     private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>();
     private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
     public float leftBound, rightBound;
+    private float maxFrameTime, currentFrameTime;
+    public int frame;
 
     public Boat(String col){
         this.buildBoatData();
@@ -29,6 +31,8 @@ public class Boat {
         leftBound = 0;
         rightBound = 0;
         timePenalty = 0;
+        frame = 0;
+        maxFrameTime = 0.5f/2;
         collisionBounds = new Rectangle(PosX,PosY,80,80);
     }
 //  TODO: Change the values for the boats.
@@ -115,28 +119,14 @@ public class Boat {
         this.rightBound = rightBound;
     }
 
-    public int getPenaltyBar(){
-        return penaltyBar;
+    public void update(float dt) {
+        currentFrameTime += dt;
+        if (currentFrameTime > maxFrameTime) {
+            frame ++;
+            currentFrameTime = 0;
+        }
+        if (frame >= 2) {
+            frame = 0;
+        }
     }
-
-    public void setPenaltyBar(int p){
-        penaltyBar = p;
-    }
-
-    public int getFatigue(){
-        return fatigue;
-    }
-
-    public void setFatigue(int f){
-        fatigue = f;
-    }
-    
-    public int getHealth(){
-        return health;
-    }
-
-    public void setHealth(int h){
-        health = h;
-    }
-
 }

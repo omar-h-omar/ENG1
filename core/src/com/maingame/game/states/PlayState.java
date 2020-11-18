@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.Timer;
 import com.maingame.game.MainGame;
 import com.maingame.game.sprites.Boat;
 import com.maingame.game.sprites.Obstacles;
@@ -21,7 +22,7 @@ public class PlayState extends State{
     private Texture boat;
     private List<Boat> boats;
     private int leg;
-    private long time;
+    private long time, countDown;
     private Boat player;
     private float riverPos1, riverPos2; // A tracker for the positions of the river assets
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
@@ -71,16 +72,25 @@ public class PlayState extends State{
         riverPos2 = river.getHeight();
 
         this.buildObstaclesList(leg);
+        countDown = System.currentTimeMillis();
     }
 
     @Override
     public void handleInput() {
+        player.PosY += player.speed;
+        cam.position.y += player.speed;
+        if (time == 0){
+            time = System.currentTimeMillis();
+        }
         if (Gdx.input.isKeyPressed(Input.Keys.W) || (Gdx.input.isKeyPressed(Input.Keys.UP))){
-            player.PosY += player.speed;
-            cam.position.y += player.speed;
-            if (time == 0){
-                time = System.currentTimeMillis();
+            player.PosY += player.acceleration;
+            cam.position.y += player.acceleration;
+            if (player.fatigue -1 < 0){
+                player.fatigue = 0;
+            }else {
+                player.fatigue -= 0.00001;
             }
+
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)){
             player.PosX -= player.maneuverability/2;
@@ -88,27 +98,25 @@ public class PlayState extends State{
         if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)){
             player.PosX += player.maneuverability/2;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)){
-            if (player.fatigue -1 < 0){
-                player.fatigue = 0;
-            }else {
-            player.fatigue -= 1;
-            }
-        }
-        
         cam.update();
     }
 
     @Override
     public void update(float dt) {
-        handleInput();
-        updateCollisionBoundaries();
-        updateRiver();
-        collisionDetection();
-        boatsOutOfBounds();
-        updateMapColour();
-        repositionObstacles();
-        updateBoatPenalties();
+        if ((System.currentTimeMillis() - countDown)/1000 > 3) {
+            handleInput();
+            updateCollisionBoundaries();
+            updateRiver();
+            collisionDetection();
+            boatsOutOfBounds();
+            updateMapColour();
+            repositionObstacles();
+            updateBoatPenalties();
+            for (int i = 0; i < boats.size() - 1; i++) {
+                boats.get(i).update(dt);
+            }
+            player.update(dt);
+        }
     }
 
     @Override
@@ -131,25 +139,25 @@ public class PlayState extends State{
 
             Boat boat = boats.get(0);
             boat.setBounds(0,river.getWidth()-50);
-            sb.draw(boat.images.get(0), boat.PosX,boat.PosY,100,100);
+            sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
             boat = boats.get(1);
             boat.setBounds(river.getWidth()-50,river.getWidth()*2-50);
-            sb.draw(boat.images.get(0), boat.PosX,boat.PosY,100,100);
+            sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
             boat = player;
             boat.setBounds(river.getWidth()*2-50,river.getWidth()*3-50);
-            sb.draw(boat.images.get(0),boat.PosX,boat.PosY,100,100);
+            sb.draw(boat.images.get(boat.frame),boat.PosX,boat.PosY,100,100);
             boat = boats.get(2);
             boat.setBounds(river.getWidth()*3-50,river.getWidth()*4-50);
-            sb.draw(boat.images.get(0), boat.PosX,boat.PosY,100,100);
+            sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
             boat = boats.get(3);
             boat.setBounds(river.getWidth()*4-50,river.getWidth()*5-50);
-            sb.draw(boat.images.get(0), boat.PosX,boat.PosY,100,100);
+            sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
         }
         Texture pix2 = new Texture(fatigueMap2);
         Texture pix = new Texture(fatigueMap);
         font.draw(sb,"Fatigue: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 358);
         sb.draw(pix2,cam.position.x/2 - pix2.getWidth() ,cam.position.y + 310);
-        int fatigueBar = (player.fatigue * 200)/100;
+        int fatigueBar = (player.fatigue * 200)/300;
         sb.draw(pix,cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 315,fatigueBar,30);
         pix2 = new Texture(healthMap2);
         pix = new Texture(healthMap);
@@ -176,6 +184,9 @@ public class PlayState extends State{
 
         if (time != 0){
             font.draw(sb,"Time: " + ((System.currentTimeMillis() - time)/1000 + player.timePenalty) + "s" ,cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 210);
+        }
+        if ((System.currentTimeMillis() - countDown)/1000 < 3) {
+            font.draw(sb,"Countdown: " + (3 - (System.currentTimeMillis() - countDown)/1000),cam.position.x - 170,cam.position.y+50);
         }
         sb.end();
     }
@@ -209,11 +220,12 @@ public class PlayState extends State{
         }else if (player.health <= 75){
             healthMap.setColor(Color.valueOf("F2BB05"));
         }
-        if (player.fatigue <= 25){
+        int fatiguePercent = player.fatigue*100/300;
+        if (fatiguePercent <= 25){
             fatigueMap.setColor(Color.valueOf("823038"));
-        }else if (player.fatigue <=50){
+        }else if (fatiguePercent <=50){
             fatigueMap.setColor(Color.valueOf("F95738"));
-        }else if (player.fatigue <= 75){
+        }else if (fatiguePercent <= 75){
             fatigueMap.setColor(Color.valueOf("F2BB05"));
         }
         if (player.penaltyBar <= 25){

@@ -37,7 +37,11 @@ public class Obstacles {
 
     public void checkHit(Boat boat) {
         if (collisionBounds.overlaps(boat.collisionBounds)){
-            System.out.println("Collision Detected");
+//            System.out.println("Collision Detected");
+            boat.health -= 5;
+            posX = -9000;
+            posY = -9000;
+            collisionBounds.setPosition(posX,posY);
         }
     }
 
