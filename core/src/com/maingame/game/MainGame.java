@@ -14,7 +14,12 @@ public class MainGame extends ApplicationAdapter {
 	public static final String TITLE = "Dragonite Dragon Boat Race";
 	private GameStateManager gsm;
 	private SpriteBatch batch;
-	
+
+	/**
+	 * {@inheritDoc}
+	 * Shows the WelcomeState when the game first starts
+	 * @see WelcomeState
+	 */
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -23,13 +28,19 @@ public class MainGame extends ApplicationAdapter {
 		gsm.push(new WelcomeState(gsm));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void render () {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		gsm.update(Gdx.graphics.getDeltaTime());
 		gsm.render(batch);
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void dispose () {
 		batch.dispose();

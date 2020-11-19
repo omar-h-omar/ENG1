@@ -6,11 +6,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.maingame.game.MainGame;
 
+/**
+ * Shows a Welcome Screen for users.
+ * Users can then move to the menu by clicking any key or any part of the screen.
+ */
 public class WelcomeState extends State {
 	private final Texture background;
 	private final Texture playBtn;
 	private final Texture title;
-	private final Texture advance;
+	private final Texture advance; // a message telling users what input is expected
 	
 
 	public WelcomeState(GameStateManager gsm) {
@@ -21,6 +25,11 @@ public class WelcomeState extends State {
 		advance = new Texture("advance.PNG");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Moves to the MenuState once any input is provided
+	 * @see MenuState
+	 */
 	@Override
 	public void handleInput() {
 	
@@ -33,12 +42,20 @@ public class WelcomeState extends State {
 			dispose();
 		}
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * @param dt the time between each start of a render()
+	 */
 	@Override
 	public void update(float dt) {
 		handleInput();
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * @param sb a batch for drawing objects
+	 */
 	@Override
 	public void render(SpriteBatch sb) {
 		sb.begin();
@@ -48,8 +65,10 @@ public class WelcomeState extends State {
 		sb.draw(advance, (MainGame.WIDTH / 20) - (advance.getWidth() / 250), MainGame.HEIGHT / 50);
 		sb.end();
 	}
-	
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void dispose() {
 		background.dispose();

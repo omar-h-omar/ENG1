@@ -12,6 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Shows a menu where users can select different coloured boats and see their different stats.
+ * Shows the users game controls.
+ */
 public class MenuState extends State {
 	private final Texture background;
 	private final Texture leftArrow;
@@ -41,7 +45,9 @@ public class MenuState extends State {
 		x = 0;
 	}
 
-//	Initialises and adds boats to the boats list.
+	/**
+	 * Initialises and adds boats to the boats list.
+	 */
 	private void buildBoats() {
 		boats.add(new Boat("red"));
 		boats.add(new Boat("pink"));
@@ -52,6 +58,12 @@ public class MenuState extends State {
 		boats.add(new Boat("purple"));
 	}
 
+	/**
+	 * Generates a random list of enemy boats for the PlayState.
+	 * @see PlayState#PlayState(GameStateManager, List, Boat, int)
+	 * @param player the boat of the player.
+	 * @return a random list of enemy boats.
+	 */
 	private List<Boat> PlayStateBoats(Boat player) {
 		List<Boat> output = new ArrayList<Boat>();
 		for (int i = 0; i < 4; i++) {
@@ -63,7 +75,10 @@ public class MenuState extends State {
 		return output;
 	}
 
-//	Checks what is being clicked on the screen and applies changes.
+	/**
+	 * {@inheritDoc}
+	 * Changes the current boat or Shows the PlayState depending on user input
+	 */
 	@Override
 	public void handleInput() {
 		if (Gdx.input.justTouched()) {
@@ -93,12 +108,21 @@ public class MenuState extends State {
 			x = boats.size() - 1;
 		}
 	}
-	
+
+	/**
+	 * {@inheritDoc}
+	 * @param dt the time between each start of a render()
+	 */
 	@Override
 	public void update(float dt) {
 		handleInput();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * Shows the user the current boat selected, its stats, game controls and button to start game.
+	 * @param sb a batch for drawing objects
+	 */
 	@Override
 	public void render(SpriteBatch sb) {
 		sb.begin();
@@ -122,6 +146,9 @@ public class MenuState extends State {
 		sb.end();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void dispose() {
 		background.dispose();

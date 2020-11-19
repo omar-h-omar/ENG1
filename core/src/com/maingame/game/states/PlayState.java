@@ -17,21 +17,23 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Handles the logic of the main game and loading of assets.
+ */
 public class PlayState extends State{
     private Texture river, riverReversed;
-    private Texture boat;
-    private List<Boat> boats;
-    private int leg;
-    private long time, countDown;
+    private List<Boat> boats; // a list containing all the boats
+    private int leg; // an integer to keep track of the current leg
+    private long time, countDown; // a countdown used to show when the game starts. time is used to track time elapsed from the start of a leg
     private Boat player;
     private float riverPos1, riverPos2; // A tracker for the positions of the river assets
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
     private Pixmap healthMap, healthMap2; // a map to render the health bar.
     private Pixmap fatigueMap, fatigueMap2; // a map to render the fatigue bar.
     private Pixmap penaltyMap, penaltyMap2; // a map to render the penalty bar.
-    private List<Obstacles> obstaclesList = new ArrayList<Obstacles>();
+    private List<Obstacles> obstaclesList = new ArrayList<Obstacles>(); // a list containing all the obstacles.
 
-    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+    private ShapeRenderer shapeRenderer = new ShapeRenderer(); // used to render collision boxes around objects
 
     public PlayState(GameStateManager gsm, List<Boat> boats,Boat player,int leg){
         super(gsm);
@@ -75,6 +77,12 @@ public class PlayState extends State{
         countDown = System.currentTimeMillis();
     }
 
+    /**
+     * {@inheritDoc}
+     * Gives the player an initial speed and makes the camera follow the player.
+     * Given a user input, handles acceleration and movement of player on the screen.
+     * Also handles player fatigue.
+     */
     @Override
     public void handleInput() {
         player.PosY += player.speed;
@@ -101,6 +109,11 @@ public class PlayState extends State{
         cam.update();
     }
 
+    /**
+     * {@inheritDoc}
+     * Sets a 3 second countdown after which the game starts.
+     * @param dt the time between each start of a render()
+     */
     @Override
     public void update(float dt) {
         if ((System.currentTimeMillis() - countDown)/1000 > 3) {
@@ -119,15 +132,18 @@ public class PlayState extends State{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param sb a batch for drawing objects
+     */
     @Override
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(cam.combined);
         sb.begin();
-        // Checks which leg it is and renders the boats and the background
-        if (leg == 1) {
+        // Checks which leg it is and renders the boats and the background.
+        if (leg < 4) {
             sb.draw(river, 0, riverPos1);
             sb.draw(riverReversed, 0, riverPos2);
-
             sb.draw(riverReversed, river.getWidth(), riverPos1);
             sb.draw(river, river.getWidth(), riverPos2);
             sb.draw(river, river.getWidth() * 2, riverPos1);
@@ -153,6 +169,8 @@ public class PlayState extends State{
             boat.setBounds(river.getWidth()*4-50,river.getWidth()*5-50);
             sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
         }
+
+        // Renders time and stat bars including health bar , fatigue bar, penalty bar.
         Texture pix2 = new Texture(fatigueMap2);
         Texture pix = new Texture(fatigueMap);
         font.draw(sb,"Fatigue: ",cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 358);
@@ -171,7 +189,11 @@ public class PlayState extends State{
         sb.draw(pix2, cam.position.x/2 - pix2.getWidth(), cam.position.y + 212);
         int penaltyBar = (player.penaltyBar * 200)/100;
         sb.draw(pix, cam.position.x/2 - pix.getWidth() - 5,cam.position.y + 217, penaltyBar, 30);
+        if (time != 0){
+            font.draw(sb,"Time: " + ((System.currentTimeMillis() - time)/1000 + player.timePenalty) + "s" ,cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 210);
+        }
 
+        // renders obstacles.
 //        shapeRenderer.setProjectionMatrix(cam.combined);
 //        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         for (int i = 0; i < obstaclesList.size() - 1; i++) {
@@ -182,20 +204,24 @@ public class PlayState extends State{
 //        shapeRenderer.rect(player.collisionBounds.getX(),player.collisionBounds.getY(),player.collisionBounds.getWidth(),player.collisionBounds.getHeight());
 //        shapeRenderer.end();
 
-        if (time != 0){
-            font.draw(sb,"Time: " + ((System.currentTimeMillis() - time)/1000 + player.timePenalty) + "s" ,cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 210);
-        }
+        // renders a countdown at the start of each leg.
         if ((System.currentTimeMillis() - countDown)/1000 < 3) {
             font.draw(sb,"Countdown: " + (3 - (System.currentTimeMillis() - countDown)/1000),cam.position.x - 170,cam.position.y+50);
         }
         sb.end();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void dispose() {
 
     }
-    // Repositions the river assets once it goes out of the player's view
+
+    /**
+     * Repositions the river assets once they are under a player's x position.
+     */
     private void updateRiver() {
         if (player.PosY > riverPos1 + river.getHeight()){
             riverPos1 += river.getHeight() * 2;
@@ -203,7 +229,11 @@ public class PlayState extends State{
             riverPos2 += river.getHeight()* 2;
         }
     }
-    // Checks if boats are out of their lanes and decreases health
+
+    /**
+     * Checks if for each boat it is out of its lane including the player boat.
+     * @see Boat#isBoatOutOfLane()
+     */
     private void boatsOutOfBounds() {
         for (int i = 0; i<boats.size()-1; i++) {
             boats.get(i).isBoatOutOfLane();
@@ -211,7 +241,9 @@ public class PlayState extends State{
         player.isBoatOutOfLane();
     }
 
-    // Controls the colour of the bars
+    /**
+     * Changes the colours of bars depending on the percentage left in each bar.
+     */
     private void updateMapColour() {
         if (player.health <= 25){
             healthMap.setColor(Color.valueOf("823038"));
@@ -242,12 +274,16 @@ public class PlayState extends State{
         penaltyMap.fill();
     }
 
-//  Checks the current leg and generates a fixed amount of random Obstacles
+
+    /**
+     * Generates a fixed amount of random Obstacles depending on which leg it is.
+     * @param leg an int representing the current leg.
+     */
     private void buildObstaclesList(int leg) {
         String[] possibleObstacles = {"rock1","rock2","goose","duck1","duck2"};
         int obstacleCount;
         if (leg == 1) {
-            obstacleCount = 30;
+            obstacleCount = 20;
         }else if (leg == 2) {
             obstacleCount = 30;
         }else {
@@ -266,7 +302,10 @@ public class PlayState extends State{
         repositionObstacles();
     }
 
-//  Repositions Obstacles
+    /**
+     * Repositions Obstacles once they are off the screen.
+     * The obstacles are repositioned randomly to have a y value higher the top edge of the screen.
+     */
     private void repositionObstacles() {
         for (int i = 0; i < obstaclesList.size() - 1; i++){
             Obstacles obstacle = obstaclesList.get(i);
@@ -278,7 +317,11 @@ public class PlayState extends State{
         }
     }
 
-//  Updates the collisionBoundaries for the boats and the obstacles
+    /**
+     * Updates the collisionBoundaries for the boats and the obstacles.
+     * This is done to match the current position of a boat/obstacle.
+     * @see Obstacles#updateCollisionBounds()
+     */
     private void updateCollisionBoundaries() {
         for (int i=0; i < boats.size() - 1; i++){
             Boat boat = boats.get(i);
@@ -290,7 +333,11 @@ public class PlayState extends State{
             obstacle.updateCollisionBounds();
         }
     }
-//  Detects collisions between obstacles and boats
+
+    /**
+     * Detects collisions by calling checkHit for each obstacle and boat combination.
+     * @see Obstacles#checkHit(Boat)
+     */
     private void collisionDetection() {
         for (int x = 0; x < obstaclesList.size()-1; x++) {
             Obstacles obstacle = obstaclesList.get(x);
@@ -302,6 +349,9 @@ public class PlayState extends State{
         }
     }
 
+    /**
+     * Adds a time penalty to each boat including the player boat when the penaltyBar is empty.
+     */
     private void updateBoatPenalties() {
         for (int i = 0; i < boats.size() - 1; i++) {
             Boat boat = boats.get(i);

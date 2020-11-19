@@ -1,11 +1,12 @@
 package com.maingame.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
-
 import java.util.HashMap;
-
 import com.badlogic.gdx.math.Rectangle;
 
+/**
+ * A class to hold all the logic and attribute for obstacles
+ */
 public class Obstacles {
     public String name;
     public Texture img;
@@ -34,9 +35,14 @@ public class Obstacles {
         }
     }
 
+    /**
+     * Checks if a boat has collided with an obstacle.
+     * If yes, the boat's health is decreased and repositions the obstacle.
+     * @param boat a class representing a boat.
+     */
     public void checkHit(Boat boat) {
         if (collisionBounds.overlaps(boat.collisionBounds)){
-            boat.health -= 5;
+            boat.health -= ObstacleDamage.get(name);
             posX = -9000;
             posY = -9000;
             collisionBounds.setPosition(posX,posY);
@@ -46,6 +52,9 @@ public class Obstacles {
         }
     }
 
+    /**
+     * Adds how much health would be lost from each obstacle impact.
+     */
     private void buildObstacleData() {
         ObstacleDamage.put("rock1", 10);
         ObstacleDamage.put("rock2", 10);
@@ -55,6 +64,9 @@ public class Obstacles {
 
     }
 
+    /**
+     * Updates the collision bounds to match the current obstacle position
+     */
     public void updateCollisionBounds() {
         if (name == "rock1") {
             collisionBounds = new Rectangle(posX+20,posY+20,30,30);
@@ -68,6 +80,10 @@ public class Obstacles {
             collisionBounds = new Rectangle(posX+10,posY+10,40,50);
         }
     }
+
+    /**
+     * Moves movable obstacles on the screen.
+     */
     public void moveObstacle() {
         if (isMovable) {
             if (direction){

@@ -1,22 +1,23 @@
 package com.maingame.game.sprites;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * A class to hold all the logic and attribute for boats.
+ */
 public class Boat {
-    //Attributes
     public String colour;
     public List<Texture> images;
     public Rectangle collisionBounds;
     public int speed, maneuverability, robustness, acceleration, timePenalty,health=100, penaltyBar = 100, fatigue = 300,PosX,PosY;
-    private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>();
-    private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>();
-    public float leftBound, rightBound;
-    private float maxFrameTime, currentFrameTime;
-    public int frame;
+    private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>(); //Contains the images for the boats in an array of strings. The strings are the file names of the images.
+    private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>(); //Contains the attributes for each boat in an array of integers. 0 for speed 1 for acceleration 2 robustness 3 maneuverability.
+    public float leftBound, rightBound; // The left and right edges of a boat's lane.
+    private float maxFrameTime, currentFrameTime; // The maximum time allowed allowed for a frame. The current time for a frame.
+    public int frame; // a integer representing which boat texture would be loaded.
 
     public Boat(String col){
         this.buildBoatData();
@@ -35,11 +36,11 @@ public class Boat {
         maxFrameTime = 0.5f/2;
         collisionBounds = new Rectangle(PosX,PosY,80,80);
     }
+
 //  TODO: Change the values for the boats.
-//  Builds the hashmaps for the boat data.
-//  BoatImg contains the images for the boats in an array of strings. The strings are the file names of the images.
-//  BoatMap contains the attributes for each boat in an array of integers.
-//  0 for speed 1 for acceleration 2 robustness 3 maneuverability
+    /**
+     * Builds the hashmaps for the boat data.
+     */
     private void buildBoatData() {
         Texture a = new Texture("Boat1.1.png");
         Texture b = new Texture("Boat1.2.png");
@@ -99,7 +100,11 @@ public class Boat {
         arr2 = new Integer[]{4, 4, 4, 4,0,0};
         BoatMap.put("purple", arr2);
     }
-    // Checks if boat is outside its lane and decreases time allowed until a penalty
+
+    /**
+     * Checks if a boat is outside of its lane.
+     * If yes, it decreases the penaltyBar.
+     */
     public void isBoatOutOfLane() {
         if( PosX < leftBound || PosX > rightBound) {
             if (penaltyBar - 0.00000005 < 0) {
@@ -113,12 +118,21 @@ public class Boat {
             }
         }
     }
-    // Changes lane boundaries for a boat
+
+    /**
+     * Sets the lane limits for a boat.
+     * @param leftBound a float of where the boat lane starts
+     * @param rightBound a float of where the boat lane ends
+     */
     public void setBounds(float leftBound, float rightBound){
         this.leftBound = leftBound;
         this.rightBound = rightBound;
     }
 
+    /**
+     * Changes the current texture used for a boat to provide an animation.
+     * @param dt the time between each start of a render()
+     */
     public void update(float dt) {
         currentFrameTime += dt;
         if (currentFrameTime > maxFrameTime) {

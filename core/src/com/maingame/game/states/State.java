@@ -7,21 +7,33 @@ import com.badlogic.gdx.math.Vector3;
 public abstract class State {
 	
 	protected OrthographicCamera cam;
-	protected Vector3 mouse;
 	protected GameStateManager gsm;
 	
 	protected State(GameStateManager gsm) {
 		this.gsm = gsm;
 		cam = new OrthographicCamera();
-		mouse = new Vector3();
 		
 	}
-	
+
+	/**
+	 * Handles user input within a state.
+	 */
 	public abstract void handleInput();
 
+	/**
+	 * Updates other functions/values in a state.
+	 * @param dt the time between each start of a render()
+	 */
 	public abstract void update(float dt);
 
-	public abstract void render(SpriteBatch ab);
+	/**
+	 * Renders the different elements in a state
+	 * @param sb a batch for drawing objects
+	 */
+	public abstract void render(SpriteBatch sb);
 
+	/**
+	 * Disposes of assets when they're no longer in use.
+	 */
 	public abstract void dispose();
 }
