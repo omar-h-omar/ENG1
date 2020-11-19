@@ -86,12 +86,10 @@ public class Obstacle {
      */
     public void moveObstacle() {
         if (isMovable) {
-            if (direction){
+            if (!direction){
                 posX += 1;
             }else {
                 posX -= 1;
-                img.dispose();
-                img = new Texture(name + "rev.png");
             }
         }
     }
