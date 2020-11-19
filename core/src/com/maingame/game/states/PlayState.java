@@ -304,6 +304,7 @@ public class PlayState extends State{
     /**
      * Repositions Obstacles once they are off the screen.
      * The obstacles are repositioned randomly to have a y value higher the top edge of the screen.
+     * @see Obstacle#moveObstacle()
      */
     private void repositionObstacles() {
         for (int i = 0; i < obstacleList.size() - 1; i++){
