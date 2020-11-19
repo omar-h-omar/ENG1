@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 /**
  * A class to hold all the logic and attribute for obstacles
  */
-public class Obstacles {
+public class Obstacle {
     public String name;
     public Texture img;
     public int impactDamage, posX, posY;
@@ -18,7 +18,7 @@ public class Obstacles {
     HashMap<String, Integer> ObstacleDamage = new HashMap<String, Integer>();
 
 
-    public Obstacles(String obstacleName) {
+    public Obstacle(String obstacleName) {
         name = obstacleName;
         buildObstacleData();
         img = new Texture(obstacleName + ".png");

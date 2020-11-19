@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.maingame.game.MainGame;
 import com.maingame.game.sprites.Boat;
-import com.maingame.game.sprites.Obstacles;
+import com.maingame.game.sprites.Obstacle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -30,7 +30,7 @@ public class PlayState extends State{
     private Pixmap healthMap, healthMap2; // a map to render the health bar.
     private Pixmap fatigueMap, fatigueMap2; // a map to render the fatigue bar.
     private Pixmap penaltyMap, penaltyMap2; // a map to render the penalty bar.
-    private List<Obstacles> obstaclesList = new ArrayList<Obstacles>(); // a list containing all the obstacles.
+    private List<Obstacle> obstacleList = new ArrayList<Obstacle>(); // a list containing all the obstacles.
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer(); // used to render collision boxes around objects
 
@@ -195,8 +195,8 @@ public class PlayState extends State{
         // renders obstacles.
 //        shapeRenderer.setProjectionMatrix(cam.combined);
 //        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (int i = 0; i < obstaclesList.size() - 1; i++) {
-            Obstacles obstacle = obstaclesList.get(i);
+        for (int i = 0; i < obstacleList.size() - 1; i++) {
+            Obstacle obstacle = obstacleList.get(i);
             sb.draw(obstacle.img,obstacle.posX,obstacle.posY,70,70);
 //            shapeRenderer.rect(obstacle.collisionBounds.getX(),obstacle.collisionBounds.getY(),obstacle.collisionBounds.getWidth(),obstacle.collisionBounds.getHeight());
         }
@@ -290,13 +290,13 @@ public class PlayState extends State{
         }
         for (int i = 0; i < obstacleCount; i++) {
             Random generator = new Random();
-            Obstacles obstacle = new Obstacles(possibleObstacles[generator.nextInt(possibleObstacles.length)]);
+            Obstacle obstacle = new Obstacle(possibleObstacles[generator.nextInt(possibleObstacles.length)]);
             if (generator.nextFloat() > 0.5){
                 obstacle.direction = true;
             }else {
                 obstacle.direction = false;
             }
-            this.obstaclesList.add(obstacle);
+            this.obstacleList.add(obstacle);
         }
         repositionObstacles();
     }
@@ -306,8 +306,8 @@ public class PlayState extends State{
      * The obstacles are repositioned randomly to have a y value higher the top edge of the screen.
      */
     private void repositionObstacles() {
-        for (int i = 0; i < obstaclesList.size() - 1; i++){
-            Obstacles obstacle = obstaclesList.get(i);
+        for (int i = 0; i < obstacleList.size() - 1; i++){
+            Obstacle obstacle = obstacleList.get(i);
             if ((obstacle.posY + obstacle.img.getHeight() < player.PosY) || (obstacle.posX > river.getWidth() * 5) || (obstacle.posX + obstacle.img.getWidth() < 0) ){
                 obstacle.posX = ThreadLocalRandom.current().nextInt(river.getWidth()*5);
                 obstacle.posY = ThreadLocalRandom.current().nextInt(player.PosY + river.getHeight(),player.PosY + (river.getHeight()*3));
@@ -319,7 +319,7 @@ public class PlayState extends State{
     /**
      * Updates the collisionBoundaries for the boats and the obstacles.
      * This is done to match the current position of a boat/obstacle.
-     * @see Obstacles#updateCollisionBounds()
+     * @see Obstacle#updateCollisionBounds()
      */
     private void updateCollisionBoundaries() {
         for (int i=0; i < boats.size() - 1; i++){
@@ -327,19 +327,19 @@ public class PlayState extends State{
             boat.collisionBounds.setPosition(boat.PosX+10,boat.PosY+10);
         }
         player.collisionBounds.setPosition(player.PosX+10,player.PosY+10);
-        for (int i=0; i < obstaclesList.size() - 1; i++){
-            Obstacles obstacle = obstaclesList.get(i);
+        for (int i = 0; i < obstacleList.size() - 1; i++){
+            Obstacle obstacle = obstacleList.get(i);
             obstacle.updateCollisionBounds();
         }
     }
 
     /**
      * Detects collisions by calling checkHit for each obstacle and boat combination.
-     * @see Obstacles#checkHit(Boat)
+     * @see Obstacle#checkHit(Boat)
      */
     private void collisionDetection() {
-        for (int x = 0; x < obstaclesList.size()-1; x++) {
-            Obstacles obstacle = obstaclesList.get(x);
+        for (int x = 0; x < obstacleList.size()-1; x++) {
+            Obstacle obstacle = obstacleList.get(x);
             for (int y = 0; y < boats.size() - 1; y++) {
                 Boat boat = boats.get(y);
                 obstacle.checkHit(boat);
