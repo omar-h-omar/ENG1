@@ -90,6 +90,7 @@ public class Obstacle {
                 posX += 1;
             }else {
                 posX -= 1;
+                img.dispose();
                 img = new Texture(name + "rev.png");
             }
         }
