@@ -1,16 +1,18 @@
 package com.maingame.game.sprites;
 
 import com.badlogic.gdx.math.Rectangle;
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class AI {
     private Boat boat;
     private List<Obstacle> obstacleList;
+    private List<Boat> boats;
     private double randomVariable;
     public Rectangle farRightBox,midRightBox,midLeftBox,farLeftBox,rightSideBox,leftSideBox;
 
-    public AI(Boat boat, int leg, List<Obstacle> obstacleList) {
+    public AI(Boat boat, int leg, List<Obstacle> obstacleList, List<Boat> boats, Boat player) {
         this.boat = boat;
         this.obstacleList = obstacleList;
         if (leg == 0) {
@@ -22,28 +24,52 @@ public class AI {
         farLeftBox = new Rectangle(boat.PosX+10,boat.PosY+90,20,50);
         rightSideBox = new Rectangle(boat.PosX + 90,boat.PosY+10,30,130);
         leftSideBox = new Rectangle(boat.PosX - 20, boat.PosY+10, 30,130);
+        this.boats = new ArrayList<Boat>(boats);
+        this.boats.add(player);
+        this.boats.remove(boat);
     }
     public void update() {
         boat.PosY+=10;
         int weight = 0;
-        for (int i = 0; i < obstacleList.size() - 1; i++) {
+        for (int i = 0; i < obstacleList.size(); i++) {
             Obstacle obstacle = obstacleList.get(i);
-            if (overlapsFarRightBox(obstacle)){
+            if (farRightBox.overlaps(obstacle.collisionBounds)){
                 weight += 1;
             }
-            if (overlapsMidRightBox(obstacle)) {
+            if (midRightBox.overlaps(obstacle.collisionBounds)) {
                 weight += 2;
             }
-            if (overlapsMidLeftBox(obstacle)) {
+            if (midLeftBox.overlaps(obstacle.collisionBounds)) {
                 weight -= 2;
             }
-            if (overlapsFarLeftBox(obstacle)) {
+            if (farLeftBox.overlaps(obstacle.collisionBounds)) {
                 weight -= 1;
             }
-            if (overlapsRightSideBox(obstacle)) {
+            if (rightSideBox.overlaps(obstacle.collisionBounds)) {
                 weight += 1;
             }
-            if (overlapsLeftSideBox(obstacle)) {
+            if (leftSideBox.overlaps(obstacle.collisionBounds)) {
+                weight -= 1;
+            }
+        }
+        for (int i = 0; i < boats.size(); i++) {
+            Boat enemyBoat = boats.get(i);
+            if (farRightBox.overlaps(enemyBoat.collisionBounds)){
+                weight += 1;
+            }
+            if (midRightBox.overlaps(enemyBoat.collisionBounds)) {
+                weight += 2;
+            }
+            if (midLeftBox.overlaps(enemyBoat.collisionBounds)) {
+                weight -= 2;
+            }
+            if (farLeftBox.overlaps(enemyBoat.collisionBounds)) {
+                weight -= 1;
+            }
+            if (rightSideBox.overlaps(enemyBoat.collisionBounds)) {
+                weight += 1;
+            }
+            if (leftSideBox.overlaps(enemyBoat.collisionBounds)) {
                 weight -= 1;
             }
         }
@@ -55,30 +81,6 @@ public class AI {
         }
     }
 
-    private boolean overlapsFarRightBox(Obstacle obstacle) {
-        return farRightBox.overlaps(obstacle.collisionBounds);
-    }
-
-    private boolean overlapsFarLeftBox(Obstacle obstacle) {
-        return farLeftBox.overlaps(obstacle.collisionBounds);
-    }
-
-    private boolean overlapsMidRightBox(Obstacle obstacle) {
-        return midRightBox.overlaps(obstacle.collisionBounds);
-    }
-
-    private boolean overlapsMidLeftBox(Obstacle obstacle) {
-        return midLeftBox.overlaps(obstacle.collisionBounds);
-    }
-
-    private boolean overlapsRightSideBox(Obstacle obstacle) {
-        return rightSideBox.overlaps(obstacle.collisionBounds);
-    }
-
-    private boolean overlapsLeftSideBox(Obstacle obstacle) {
-        return leftSideBox.overlaps(obstacle.collisionBounds);
-    }
-
     private void moveRight(int weight) {
         while (weight*2 < 0){
             if (!(boat.PosX + boat.speed > boat.rightBound)) {
@@ -87,6 +89,7 @@ public class AI {
             weight ++;
         }
     }
+
     private void moveLeft(int weight) {
         while (weight*2 > 0){
             if (!(boat.PosX - boat.speed < boat.leftBound)){

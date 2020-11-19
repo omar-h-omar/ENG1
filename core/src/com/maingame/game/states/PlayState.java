@@ -127,7 +127,7 @@ public class PlayState extends State{
             updateBoatPenalties();
             for (int i = 0; i < boats.size(); i++) {
                 boats.get(i).update(dt);
-                AI ai = new AI(boats.get(i), leg,obstacleList);
+                AI ai = new AI(boats.get(i), leg,obstacleList, boats, player);
                 ai.update();
             }
             player.update(dt);
@@ -197,22 +197,22 @@ public class PlayState extends State{
         }
 
         // renders obstacles.
-        shapeRenderer.setProjectionMatrix(cam.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.setProjectionMatrix(cam.combined);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         for (int i = 0; i < obstacleList.size() - 1; i++) {
             Obstacle obstacle = obstacleList.get(i);
             sb.draw(obstacle.img,obstacle.posX,obstacle.posY,70,70,0,0,obstacle.img.getWidth(),obstacle.img.getHeight(),obstacle.direction,false);
 //            shapeRenderer.rect(obstacle.collisionBounds.getX(),obstacle.collisionBounds.getY(),obstacle.collisionBounds.getWidth(),obstacle.collisionBounds.getHeight());
         }
-        AI ai = new AI(player,1,obstacleList);
-        shapeRenderer.rect(ai.farRightBox.x,ai.farRightBox.y,ai.farRightBox.width,ai.farRightBox.height);
-        shapeRenderer.rect(ai.farLeftBox.x,ai.farLeftBox.y,ai.farLeftBox.width,ai.farLeftBox.height);
-        shapeRenderer.rect(ai.midRightBox.x,ai.midRightBox.y,ai.midRightBox.width,ai.midRightBox.height);
-        shapeRenderer.rect(ai.midLeftBox.x,ai.midLeftBox.y,ai.midLeftBox.width,ai.midLeftBox.height);
-        shapeRenderer.rect(ai.rightSideBox.x,ai.rightSideBox.y,ai.rightSideBox.width,ai.rightSideBox.height);
-        shapeRenderer.rect(ai.leftSideBox.x,ai.leftSideBox.y,ai.leftSideBox.width,ai.leftSideBox.height);
-        shapeRenderer.rect(player.collisionBounds.getX(),player.collisionBounds.getY(),player.collisionBounds.getWidth(),player.collisionBounds.getHeight());
-        shapeRenderer.end();
+//        AI ai = new AI(player,1,obstacleList, boats, player);
+//        shapeRenderer.rect(ai.farRightBox.x,ai.farRightBox.y,ai.farRightBox.width,ai.farRightBox.height);
+//        shapeRenderer.rect(ai.farLeftBox.x,ai.farLeftBox.y,ai.farLeftBox.width,ai.farLeftBox.height);
+//        shapeRenderer.rect(ai.midRightBox.x,ai.midRightBox.y,ai.midRightBox.width,ai.midRightBox.height);
+//        shapeRenderer.rect(ai.midLeftBox.x,ai.midLeftBox.y,ai.midLeftBox.width,ai.midLeftBox.height);
+//        shapeRenderer.rect(ai.rightSideBox.x,ai.rightSideBox.y,ai.rightSideBox.width,ai.rightSideBox.height);
+//        shapeRenderer.rect(ai.leftSideBox.x,ai.leftSideBox.y,ai.leftSideBox.width,ai.leftSideBox.height);
+//        shapeRenderer.rect(player.collisionBounds.getX(),player.collisionBounds.getY(),player.collisionBounds.getWidth(),player.collisionBounds.getHeight());
+//        shapeRenderer.end();
 
         // renders a countdown at the start of each leg.
         if ((System.currentTimeMillis() - countDown)/1000 < 3) {
