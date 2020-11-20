@@ -12,6 +12,8 @@ import com.maingame.game.MainGame;
 import com.maingame.game.sprites.AI;
 import com.maingame.game.sprites.Boat;
 import com.maingame.game.sprites.Obstacle;
+
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -21,9 +23,9 @@ import java.util.concurrent.ThreadLocalRandom;
  * Handles the logic of the main game and loading of assets.
  */
 public class PlayState extends State{
-    private Texture river, riverReversed;
+    private Texture river, riverReversed, finishLine;
     private List<Boat> boats; // a list containing all the boats
-    private int leg; // an integer to keep track of the current leg
+    private int leg, finishLinePosition; // an integer to keep track of the current leg
     private long time, countDown; // a countdown used to show when the game starts. time is used to track time elapsed from the start of a leg
     private Boat player;
     private float riverPos1, riverPos2; // A tracker for the positions of the river assets
@@ -32,11 +34,13 @@ public class PlayState extends State{
     private Pixmap fatigueMap, fatigueMap2; // a map to render the fatigue bar.
     private Pixmap penaltyMap, penaltyMap2; // a map to render the penalty bar.
     private List<Obstacle> obstacleList = new ArrayList<Obstacle>(); // a list containing all the obstacles.
+    private Rectangle finishLineBounds;
 
     private ShapeRenderer shapeRenderer = new ShapeRenderer(); // used to render collision boxes around objects
 
     public PlayState(GameStateManager gsm, List<Boat> boats,Boat player,int leg){
         super(gsm);
+        finishLine = new Texture("finishLine.png");
         river = new Texture("river.png");
         riverReversed = new Texture("river_reversed.png");
 
@@ -135,6 +139,11 @@ public class PlayState extends State{
             player.update(dt);
             player.hasCollided(boats,player);
             checkBoatHealth();
+            if ((System.currentTimeMillis() - countDown)/1000> 48 && finishLinePosition == 0) {
+                finishLinePosition = player.PosY + river.getHeight() +100;
+                finishLineBounds = new Rectangle(0,finishLinePosition,finishLine.getWidth(),finishLine.getHeight());
+            }
+            finishLeg();
         }
     }
 
@@ -158,6 +167,10 @@ public class PlayState extends State{
             sb.draw(river, river.getWidth() * 3, riverPos2);
             sb.draw(river, river.getWidth() * 4, riverPos1);
             sb.draw(riverReversed, river.getWidth() * 4, riverPos2);
+
+            if ((System.currentTimeMillis() - countDown)/1000> 48) {
+                sb.draw(finishLine,0,finishLinePosition);
+            }
 
             Boat boat = boats.get(0);
             boat.setBounds(0,river.getWidth()-50);
@@ -405,6 +418,14 @@ public class PlayState extends State{
         if (player.health <= 0) {
             gsm.set(new GameOverHealth(gsm));
             player.hasLost = true;
+        }
+    }
+
+    private void finishLeg() {
+        if (finishLineBounds != null) {
+            if (player.PosY > finishLinePosition +10){
+                gsm.set(new GameOverHealth(gsm));
+            }
         }
     }
 }
