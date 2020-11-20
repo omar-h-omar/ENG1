@@ -18,6 +18,7 @@ public class Boat {
     public float leftBound, rightBound; // The left and right edges of a boat's lane.
     private float maxFrameTime, currentFrameTime; // The maximum time allowed allowed for a frame. The current time for a frame.
     public int frame; // a integer representing which boat texture would be loaded.
+    public boolean hasLost;
 
     public Boat(String col){
         this.buildBoatData();
@@ -35,6 +36,7 @@ public class Boat {
         frame = 0;
         maxFrameTime = 0.5f/2;
         collisionBounds = new Rectangle(PosX,PosY,80,80);
+        hasLost = false;
     }
 
 //  TODO: Change the values for the boats.
@@ -85,19 +87,19 @@ public class Boat {
         arr.add(b);
         BoatImg.put("purple", arr);
 
-        Integer[] arr2 = {10,10,10,10,0,0};
+        Integer[] arr2 = {7,7,7,7,0,0};
         BoatMap.put("red", arr2);
-        arr2 = new Integer[]{9, 9, 9, 9,0,0};
+        arr2 = new Integer[]{8, 6, 8, 6,0,0};
         BoatMap.put("pink", arr2);
-        arr2 = new Integer[]{8, 8, 8, 8,0,0};
+        arr2 = new Integer[]{9, 9, 4, 5,0,0};
         BoatMap.put("blue", arr2);
-        arr2 = new Integer[]{7, 7, 7, 7,0,0};
+        arr2 = new Integer[]{8, 8, 5, 7,0,0};
         BoatMap.put("yellow", arr2);
-        arr2 = new Integer[]{6, 6, 6, 6,0,0};
+        arr2 = new Integer[]{8, 5, 10, 5,0,0};
         BoatMap.put("orange", arr2);
-        arr2 = new Integer[]{5, 5, 5, 5,0,0};
+        arr2 = new Integer[]{6, 6, 9, 7,0,0};
         BoatMap.put("green", arr2);
-        arr2 = new Integer[]{4, 4, 4, 4,0,0};
+        arr2 = new Integer[]{6, 6, 6, 10,0,0};
         BoatMap.put("purple", arr2);
     }
 
@@ -143,4 +145,29 @@ public class Boat {
             frame = 0;
         }
     }
+
+    public void hasCollided(List<Boat> boats, Boat player) {
+        List<Boat> newBoats = new ArrayList<Boat>(boats);
+        if (collisionBounds != player.collisionBounds) {
+            newBoats.remove(this);
+            if (collisionBounds.overlaps(player.collisionBounds)) {
+                if (health - 2 < 0){
+                    health = 0;
+                }else{
+                    health -= 2;
+                }
+            }
+        }
+        for (int i = 0; i < newBoats.size(); i++) {
+            Boat enemyBoat = newBoats.get(i);
+            if (collisionBounds.overlaps(enemyBoat.collisionBounds)) {
+                if (health - 2 < 0){
+                    health = 0;
+                }else{
+                    health -= 2;
+                }
+            }
+        }
+    }
+
 }

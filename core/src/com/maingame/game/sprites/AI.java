@@ -29,7 +29,7 @@ public class AI {
         this.boats.remove(boat);
     }
     public void update() {
-        boat.PosY+=10;
+        boat.PosY+=boat.speed;
         int weight = 0;
         for (int i = 0; i < obstacleList.size(); i++) {
             Obstacle obstacle = obstacleList.get(i);
@@ -82,18 +82,18 @@ public class AI {
     }
 
     private void moveRight(int weight) {
-        while (weight*2 < 0){
+        while (weight < 0){
             if (!(boat.PosX + boat.speed > boat.rightBound)) {
-                boat.PosX += boat.speed;
+                boat.PosX += boat.maneuverability/4;
             }
             weight ++;
         }
     }
 
     private void moveLeft(int weight) {
-        while (weight*2 > 0){
+        while (weight > 0){
             if (!(boat.PosX - boat.speed < boat.leftBound)){
-                boat.PosX -= boat.speed;
+                boat.PosX -= boat.maneuverability/4;
             }
             weight --;
         }

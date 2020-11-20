@@ -129,9 +129,12 @@ public class PlayState extends State{
                 boats.get(i).update(dt);
                 AI ai = new AI(boats.get(i), leg,obstacleList, boats, player);
                 ai.update();
+                List<Boat> newBoatList = new ArrayList<Boat>(boats);
+                boats.get(i).hasCollided(newBoatList,player);
             }
             player.update(dt);
-
+            player.hasCollided(boats,player);
+            checkBoatHealth();
         }
     }
 
@@ -158,19 +161,29 @@ public class PlayState extends State{
 
             Boat boat = boats.get(0);
             boat.setBounds(0,river.getWidth()-50);
-            sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
+            if (!boat.hasLost) {
+                sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
+            }
             boat = boats.get(1);
             boat.setBounds(river.getWidth()-50,river.getWidth()*2-50);
-            sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
+            if (!boat.hasLost) {
+                sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
+            }
             boat = player;
             boat.setBounds(river.getWidth()*2-50,river.getWidth()*3-50);
-            sb.draw(boat.images.get(boat.frame),boat.PosX,boat.PosY,100,100);
+            if (!boat.hasLost) {
+                sb.draw(boat.images.get(boat.frame),boat.PosX,boat.PosY,100,100);
+            }
             boat = boats.get(2);
             boat.setBounds(river.getWidth()*3-50,river.getWidth()*4-50);
-            sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
+            if (!boat.hasLost) {
+                sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
+            }
             boat = boats.get(3);
             boat.setBounds(river.getWidth()*4-50,river.getWidth()*5-50);
-            sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
+            if (!boat.hasLost) {
+                sb.draw(boat.images.get(boat.frame), boat.PosX,boat.PosY,100,100);
+            }
         }
 
         // Renders time and stat bars including health bar , fatigue bar, penalty bar.
@@ -226,7 +239,12 @@ public class PlayState extends State{
      */
     @Override
     public void dispose() {
-
+        river.dispose();
+        font.dispose();
+        for (int i = 0; i < obstacleList.size(); i++) {
+            Obstacle obstacle = obstacleList.get(i);
+            obstacle.img.dispose();
+        }
     }
 
     /**
@@ -374,6 +392,19 @@ public class PlayState extends State{
         if (player.penaltyBar == 0) {
             player.penaltyBar = 100;
             player.timePenalty += 2;
+        }
+    }
+
+    private void checkBoatHealth() {
+        for (int i = 0; i < boats.size(); i++) {
+            Boat boat = boats.get(i);
+            if (boat.health <= 0) {
+                boat.hasLost = true;
+            }
+        }
+        if (player.health <= 0) {
+            gsm.set(new GameOverHealth(gsm));
+            player.hasLost = true;
         }
     }
 }

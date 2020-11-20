@@ -41,7 +41,7 @@ public class Obstacle {
      * @param boat a class representing a boat.
      */
     public void checkHit(Boat boat) {
-        if (collisionBounds.overlaps(boat.collisionBounds)){
+        if (collisionBounds.overlaps(boat.collisionBounds) && (!boat.hasLost)){
             boat.health -= ObstacleDamage.get(name);
             posX = -9000;
             posY = -9000;
