@@ -22,24 +22,24 @@ import java.util.concurrent.ThreadLocalRandom;
  * Handles the logic of the main game and loading of assets.
  */
 public class PlayState extends State{
-    private final Texture river;
-    private final Texture riverReversed;
+    private final Texture river; // the river asset
+    private final Texture riverReversed; // the river asset reversed
     private final Texture finishLine;
     private final List<Boat> boats; // a list containing all the boats
-    private final int leg;
+    private final int leg; // the current leg number
     private int finishLinePosition; // an integer to keep track of the current leg
-    private long time;
-    private final long countDown; // a countdown used to show when the game starts. time is used to track time elapsed from the start of a leg
+    private long time; // Used to track time elapsed from the start of a leg
+    private final long countDown; // a countdown used to show when the game starts.
     private final Boat player;
-    private float riverPos1;
+    private float riverPos1; // A tracker for the positions of the river assets
     private float riverPos2; // A tracker for the positions of the river assets
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
-    private final Pixmap healthMap;
-    private final Pixmap healthMap2; // a map to render the health bar.
-    private final Pixmap fatigueMap;
-    private final Pixmap fatigueMap2; // a map to render the fatigue bar.
-    private final Pixmap penaltyMap;
-    private final Pixmap penaltyMap2; // a map to render the penalty bar.
+    private final Pixmap healthMap; // a map to render the health bar background.
+    private final Pixmap healthMap2; // a map to render the health bar background.
+    private final Pixmap fatigueMap; // a map to render the fatigue bar.
+    private final Pixmap fatigueMap2; // a map to render the fatigue bar background.
+    private final Pixmap penaltyMap; // a map to render the penalty bar.
+    private final Pixmap penaltyMap2; // a map to render the penalty bar background.
     private final List<Obstacle> obstacleList = new ArrayList<>(); // a list containing all the obstacles.
     private Rectangle finishLineBounds;
     private final Random generator = new Random();
@@ -369,6 +369,10 @@ public class PlayState extends State{
         }
     }
 
+    /**
+     * Checks if the boat has depleted its health and changes hasLost
+     * @see Boat#setHasLost(boolean)
+     */
     private void checkBoatHealth() {
         for (Boat boat : boats) {
             if (boat.getHealth() <= 0) {
@@ -381,12 +385,20 @@ public class PlayState extends State{
         }
     }
 
+    /**
+     * checks if the leg is over and transitions to the leaderboard state.
+     */
     private void finishLeg() {
         if ((finishLineBounds != null) && (player.getPosY() > finishLinePosition +10)) {
             gsm.set(new GameOverSpeed(gsm));
         }
     }
 
+    /**
+     * Draw the boats on specified locations depending on which lap it is.
+     * @param leg the current leg
+     * @param sb the spritebatch used for rendering
+     */
     private void drawBoats(int leg,SpriteBatch sb) {
         if (leg != 4) {
             Boat boat = boats.get(0);

@@ -15,8 +15,8 @@ public class GameOverSpeed extends State {
 
 	private final Texture background;
 	private final Texture gameOverBtn;
-	private final Texture info;
-	private final long countDown;
+	private final Texture info; // the text presented to the user onscreen.
+	private final long countDown; // a counter used to allow the user to read what is onscreen.
 
 	public GameOverSpeed(GameStateManager gsm) {
 		super(gsm);

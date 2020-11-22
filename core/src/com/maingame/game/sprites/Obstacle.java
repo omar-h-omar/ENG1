@@ -14,8 +14,8 @@ public class Obstacle {
     private int posX;
     private int posY;
     private final boolean isMovable;
-    private boolean direction;
-    private Rectangle collisionBounds;
+    private boolean direction; // the direction of the boat with true being left and false being right.
+    private Rectangle collisionBounds; // a box used to identify collisions.
     private static final String ROCK_1 = "rock1";
     private static final String ROCK_2 = "rock2";
 
@@ -69,7 +69,7 @@ public class Obstacle {
     }
 
     /**
-     * Updates the collision bounds to match the current obstacle position
+     * Updates the collision bounds to match the current obstacle position.
      */
     public void updateCollisionBounds() {
         switch (name) {
@@ -104,30 +104,65 @@ public class Obstacle {
         }
     }
 
+    /**
+     * Gets pos x.
+     *
+     * @return the pos x
+     */
     public int getPosX() {
         return posX;
     }
 
+    /**
+     * Sets pos x.
+     *
+     * @param posX the pos x
+     */
     public void setPosX(int posX) {
         this.posX = posX;
     }
 
+    /**
+     * Gets pos y.
+     *
+     * @return the pos y
+     */
     public int getPosY() {
         return posY;
     }
 
+    /**
+     * Sets pos y.
+     *
+     * @param posY the pos y
+     */
     public void setPosY(int posY) {
         this.posY = posY;
     }
 
+    /**
+     * Is direction boolean.
+     *
+     * @return the direction of the obstacle
+     */
     public boolean isDirection() {
         return direction;
     }
 
+    /**
+     * Sets direction.
+     *
+     * @param direction the direction of the boat with true being left and false being right
+     */
     public void setDirection(boolean direction) {
         this.direction = direction;
     }
 
+    /**
+     * Gets collision bounds.
+     *
+     * @return the collision bounds
+     */
     public Rectangle getCollisionBounds() {
         return collisionBounds;
     }

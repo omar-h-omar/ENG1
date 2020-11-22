@@ -9,13 +9,13 @@ public class AI {
     private final Boat boat;
     private final List<Obstacle> obstacleList;
     private final List<Boat> boats;
-    private double randomVariable;
-    public final Rectangle farRightBox;
-    public final Rectangle midRightBox;
-    public final Rectangle midLeftBox;
-    public final Rectangle farLeftBox;
-    public final Rectangle rightSideBox;
-    public final Rectangle leftSideBox;
+    private double randomVariable; // a double used to control how many times can the AI make the right move.
+    public final Rectangle farRightBox; // a rectangle on the far right in front of the boat.
+    public final Rectangle midRightBox; // a rectangle on the middle right in front of the boat.
+    public final Rectangle midLeftBox; // a rectangle on the middle left in front of the boat.
+    public final Rectangle farLeftBox; // a rectangle on the far left in front of the boat.
+    public final Rectangle rightSideBox; // a rectangle on the right of the boat.
+    public final Rectangle leftSideBox; // a rectangle on the left of the boat.
 
     public AI(Boat boat, int leg, List<Obstacle> obstacleList, List<Boat> boats, Boat player) {
         this.boat = boat;
@@ -33,6 +33,11 @@ public class AI {
         this.boats.add(player);
         this.boats.remove(boat);
     }
+
+    /**
+     * Updates the boat location.
+     * @see #isNearBoats(int) ,#isNearObstacles(int) ,{@link #moveLeft(int)} ,{@link #moveRight(int)}
+     */
     public void update() {
         boat.setPosY(boat.getPosY() + boat.speed);
         int weight = 0;
@@ -47,6 +52,11 @@ public class AI {
         }
     }
 
+    /**
+     * Moves the AI boat to the right depending on the weight and the boat's maneuverability.
+     * @param weight an integer controlling the direction of the movement of the AI
+     * @see Boat#setPosX(int),Boat#maneuverability
+     */
     private void moveRight(int weight) {
         while (weight < 0){
             if ((boat.getPosX() + boat.speed < boat.getRightBound())) {
@@ -56,6 +66,11 @@ public class AI {
         }
     }
 
+    /**
+     * Moves the AI boat to the left depending on the weight and the boat's maneuverability.
+     * @param weight an integer controlling the direction of the movement of the AI
+     * @see Boat#setPosX(int),Boat#maneuverability
+     */
     private void moveLeft(int weight) {
         while (weight > 0){
             if ((boat.getPosX() - boat.speed > boat.getLeftBound())){
@@ -65,6 +80,12 @@ public class AI {
         }
     }
 
+    /**
+     * Checks if the AI boat is near obstacles using collision bounds and adjusts the input weight.
+     * @param weight an integer controlling the direction of the movement of the AI
+     * @return the updated integer weight
+     * @see Obstacle#getCollisionBounds() 
+     */
     private int isNearObstacles(int weight) {
         for (Obstacle obstacle : obstacleList) {
             if (farRightBox.overlaps(obstacle.getCollisionBounds())) {
@@ -89,6 +110,12 @@ public class AI {
         return weight;
     }
 
+    /**
+     * Checks if the AI boat is near other boats using collision bounds and adjusts the input weight.
+     * @param weight an integer controlling the direction of the movement of the AI
+     * @return the updated integer weight
+     * @see Boat#collisionBounds
+     */
     private int isNearBoats(int weight) {
         for (Boat enemyBoat : boats) {
             if (farRightBox.overlaps(enemyBoat.collisionBounds)) {

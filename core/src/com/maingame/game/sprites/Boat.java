@@ -11,7 +11,7 @@ import java.util.List;
 public class Boat {
     public final String colour;
     public final List<Texture> images;
-    public final Rectangle collisionBounds;
+    public final Rectangle collisionBounds; // a box used to identify collisions.
     public final int speed;
     public final int maneuverability;
     public final int robustness;
@@ -24,12 +24,12 @@ public class Boat {
     private int posY;
     private final HashMap<String, List<Texture>> boatImg = new HashMap<>(); //Contains the images for the boats in an array of strings. The strings are the file names of the images.
     private final HashMap<String, Integer[]> boatMap = new HashMap<>(); //Contains the attributes for each boat in an array of integers. 0 for speed 1 for acceleration 2 robustness 3 maneuverability.
-    private float leftBound;
-    private float rightBound; // The left and right edges of a boat's lane.
-    private final float maxFrameTime;
-    private float currentFrameTime; // The maximum time allowed allowed for a frame. The current time for a frame.
+    private float leftBound; // The left edges of a boat's lane.
+    private float rightBound; // The right edges of a boat's lane.
+    private final float maxFrameTime; // The maximum time allowed allowed for a frame.
+    private float currentFrameTime; // The current time for a frame.
     private int frame; // a integer representing which boat texture would be loaded.
-    private boolean hasLost;
+    private boolean hasLost; // a boolean indicating if a boat has lost.
 
     public Boat(String col){
         this.buildBoatData();
@@ -156,6 +156,11 @@ public class Boat {
         }
     }
 
+    /**
+     * Checks if a boat has hit another boat and decreases the boat's health.
+     * @param boats the list of boats excluding the player's boat
+     * @param player the player boat
+     */
     public void hasCollided(List<Boat> boats, Boat player) {
         List<Boat> newBoats = new ArrayList<>(boats);
         if (collisionBounds != player.collisionBounds) {
@@ -179,70 +184,155 @@ public class Boat {
         }
     }
 
+    /**
+     * Gets time penalty.
+     *
+     * @return the time penalty
+     */
     public int getTimePenalty() {
         return timePenalty;
     }
 
+    /**
+     * Sets time penalty.
+     *
+     * @param timePenalty the time penalty of a boat in seconds
+     */
     public void setTimePenalty(int timePenalty) {
         this.timePenalty = timePenalty;
     }
 
+    /**
+     * Gets health.
+     *
+     * @return the health
+     */
     public int getHealth() {
         return health;
     }
 
+    /**
+     * Sets health.
+     *
+     * @param health the health of a boat out of 100
+     */
     public void setHealth(int health) {
         this.health = health;
     }
 
+    /**
+     * Gets penalty bar.
+     *
+     * @return the penalty bar
+     */
     public int getPenaltyBar() {
         return penaltyBar;
     }
 
+    /**
+     * Sets penalty bar.
+     *
+     * @param penaltyBar the length of the penalty bar
+     */
     public void setPenaltyBar(int penaltyBar) {
         this.penaltyBar = penaltyBar;
     }
 
+    /**
+     * Gets fatigue.
+     *
+     * @return the fatigue
+     */
     public int getFatigue() {
         return fatigue;
     }
 
+    /**
+     * Sets fatigue.
+     *
+     * @param fatigue the fatigue
+     */
     public void setFatigue(int fatigue) {
         this.fatigue = fatigue;
     }
 
+    /**
+     * Gets pos x.
+     *
+     * @return the pos x
+     */
     public int getPosX() {
         return posX;
     }
 
+    /**
+     * Sets pos x.
+     *
+     * @param posX the pos x
+     */
     public void setPosX(int posX) {
         this.posX = posX;
     }
 
+    /**
+     * Gets pos y.
+     *
+     * @return the pos y
+     */
     public int getPosY() {
         return posY;
     }
 
+    /**
+     * Sets pos y.
+     *
+     * @param posY the pos y
+     */
     public void setPosY(int posY) {
         this.posY = posY;
     }
 
+    /**
+     * Gets left bound.
+     *
+     * @return the left bound
+     */
     public float getLeftBound() {
         return leftBound;
     }
 
+    /**
+     * Gets right bound.
+     *
+     * @return the right bound
+     */
     public float getRightBound() {
         return rightBound;
     }
 
+    /**
+     * Gets frame.
+     *
+     * @return the frame
+     */
     public int getFrame() {
         return frame;
     }
 
+    /**
+     * Has the boat not lost
+     *
+     * @return not hasLost
+     */
     public boolean isHasNotLost() {
         return !hasLost;
     }
 
+    /**
+     * Sets hasLost.
+     *
+     * @param hasLost has a boat lost
+     */
     public void setHasLost(boolean hasLost) {
         this.hasLost = hasLost;
     }
