@@ -2,16 +2,17 @@ package com.maingame.game.states;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  * Manages which state is shown to the user and transition between states using a stack.
  */
 public class GameStateManager {
-    private Stack<State> states;
+    private final Deque<State> states;
 
     public GameStateManager() {
-        states = new Stack<State>();
+        states = new ArrayDeque<>();
     }
 
     /**
@@ -36,7 +37,7 @@ public class GameStateManager {
      * @see State
      */
     public void set(State state) {
-        states.pop().dispose();
+        pop();
         states.push(state);
     }
 
@@ -45,7 +46,9 @@ public class GameStateManager {
      * @param dt the time between each start of a render()
      */
     public void update(float dt) {
-        states.peek().update(dt);
+        if (states.peek() != null) {
+            states.peek().update(dt);
+        }
     }
 
     /**
@@ -54,6 +57,8 @@ public class GameStateManager {
      * @see State#update(float)
      */
     public void render(SpriteBatch sb) {
-        states.peek().render(sb);
+        if (states.peek() != null) {
+            states.peek().render(sb);
+        }
     }
 }

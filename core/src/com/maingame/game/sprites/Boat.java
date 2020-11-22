@@ -9,96 +9,108 @@ import java.util.List;
  * A class to hold all the logic and attribute for boats.
  */
 public class Boat {
-    public String colour;
-    public List<Texture> images;
-    public Rectangle collisionBounds;
-    public int speed, maneuverability, robustness, acceleration, timePenalty,health=100, penaltyBar = 100, fatigue = 300,PosX,PosY;
-    private HashMap<String, List<Texture>> BoatImg = new HashMap<String, List<Texture>>(); //Contains the images for the boats in an array of strings. The strings are the file names of the images.
-    private HashMap<String, Integer[]>  BoatMap = new HashMap<String, Integer[]>(); //Contains the attributes for each boat in an array of integers. 0 for speed 1 for acceleration 2 robustness 3 maneuverability.
-    public float leftBound, rightBound; // The left and right edges of a boat's lane.
-    private float maxFrameTime, currentFrameTime; // The maximum time allowed allowed for a frame. The current time for a frame.
-    public int frame; // a integer representing which boat texture would be loaded.
+    public final String colour;
+    public final List<Texture> images;
+    public final Rectangle collisionBounds;
+    public final int speed;
+    public final int maneuverability;
+    public final int robustness;
+    public final int acceleration;
+    private int timePenalty;
+    private int health=100;
+    private int penaltyBar = 100;
+    private int fatigue = 300;
+    private int posX;
+    private int posY;
+    private final HashMap<String, List<Texture>> boatImg = new HashMap<>(); //Contains the images for the boats in an array of strings. The strings are the file names of the images.
+    private final HashMap<String, Integer[]> boatMap = new HashMap<>(); //Contains the attributes for each boat in an array of integers. 0 for speed 1 for acceleration 2 robustness 3 maneuverability.
+    private float leftBound;
+    private float rightBound; // The left and right edges of a boat's lane.
+    private final float maxFrameTime;
+    private float currentFrameTime; // The maximum time allowed allowed for a frame. The current time for a frame.
+    private int frame; // a integer representing which boat texture would be loaded.
+    private boolean hasLost;
 
     public Boat(String col){
         this.buildBoatData();
         colour = col;
-        speed = BoatMap.get(col)[0];
-        acceleration =  BoatMap.get(col)[1];
-        robustness = BoatMap.get(col)[2];
-        maneuverability = BoatMap.get(col)[3];
-        PosX = BoatMap.get(col)[4];
-        PosY = BoatMap.get(col)[5];
-        images = BoatImg.get(col);
+        speed = boatMap.get(col)[0];
+        acceleration =  boatMap.get(col)[1];
+        robustness = boatMap.get(col)[2];
+        maneuverability = boatMap.get(col)[3];
+        posX = boatMap.get(col)[4];
+        posY = boatMap.get(col)[5];
+        images = boatImg.get(col);
         leftBound = 0;
         rightBound = 0;
         timePenalty = 0;
         frame = 0;
         maxFrameTime = 0.5f/2;
-        collisionBounds = new Rectangle(PosX,PosY,80,80);
+        collisionBounds = new Rectangle(posX, posY,80,80);
+        hasLost = false;
     }
 
-//  TODO: Change the values for the boats.
     /**
      * Builds the hashmaps for the boat data.
      */
     private void buildBoatData() {
         Texture a = new Texture("Boat1.1.png");
         Texture b = new Texture("Boat1.2.png");
-        List<Texture> arr = new ArrayList<Texture>();
+        List<Texture> arr = new ArrayList<>();
         arr.add(a);
         arr.add(b);
-        BoatImg.put("red", arr);
-        arr = new ArrayList<Texture>();
+        boatImg.put("red", arr);
+        arr = new ArrayList<>();
         a = new Texture("Boat2.1.png");
         b = new Texture("Boat2.2.png");
         arr.add(a);
         arr.add(b);
-        BoatImg.put("pink", arr);
-        arr = new ArrayList<Texture>();
+        boatImg.put("pink", arr);
+        arr = new ArrayList<>();
         a = new Texture("Boat3.1.png");
         b = new Texture("Boat3.2.png");
         arr.add(a);
         arr.add(b);
-        BoatImg.put("blue", arr);
-        arr = new ArrayList<Texture>();
+        boatImg.put("blue", arr);
+        arr = new ArrayList<>();
         a = new Texture("Boat4.1.png");
         b = new Texture("Boat4.2.png");
         arr.add(a);
         arr.add(b);
-        BoatImg.put("yellow", arr);
-        arr = new ArrayList<Texture>();
+        boatImg.put("yellow", arr);
+        arr = new ArrayList<>();
         a = new Texture("Boat5.1.png");
         b = new Texture("Boat5.2.png");
         arr.add(a);
         arr.add(b);
-        BoatImg.put("orange", arr);
-        arr = new ArrayList<Texture>();
+        boatImg.put("orange", arr);
+        arr = new ArrayList<>();
         a = new Texture("Boat6.1.png");
         b = new Texture("Boat6.2.png");
         arr.add(a);
         arr.add(b);
-        BoatImg.put("green", arr);
-        arr = new ArrayList<Texture>();
+        boatImg.put("green", arr);
+        arr = new ArrayList<>();
         a = new Texture("Boat7.1.png");
         b = new Texture("Boat7.2.png");
         arr.add(a);
         arr.add(b);
-        BoatImg.put("purple", arr);
+        boatImg.put("purple", arr);
 
-        Integer[] arr2 = {10,10,10,10,0,0};
-        BoatMap.put("red", arr2);
-        arr2 = new Integer[]{9, 9, 9, 9,0,0};
-        BoatMap.put("pink", arr2);
-        arr2 = new Integer[]{8, 8, 8, 8,0,0};
-        BoatMap.put("blue", arr2);
-        arr2 = new Integer[]{7, 7, 7, 7,0,0};
-        BoatMap.put("yellow", arr2);
-        arr2 = new Integer[]{6, 6, 6, 6,0,0};
-        BoatMap.put("orange", arr2);
-        arr2 = new Integer[]{5, 5, 5, 5,0,0};
-        BoatMap.put("green", arr2);
-        arr2 = new Integer[]{4, 4, 4, 4,0,0};
-        BoatMap.put("purple", arr2);
+        Integer[] arr2 = {7,7,7,7,0,0};
+        boatMap.put("red", arr2);
+        arr2 = new Integer[]{8, 6, 8, 6,0,0};
+        boatMap.put("pink", arr2);
+        arr2 = new Integer[]{9, 9, 4, 5,0,0};
+        boatMap.put("blue", arr2);
+        arr2 = new Integer[]{8, 8, 5, 7,0,0};
+        boatMap.put("yellow", arr2);
+        arr2 = new Integer[]{8, 5, 10, 5,0,0};
+        boatMap.put("orange", arr2);
+        arr2 = new Integer[]{6, 6, 9, 7,0,0};
+        boatMap.put("green", arr2);
+        arr2 = new Integer[]{6, 6, 6, 10,0,0};
+        boatMap.put("purple", arr2);
     }
 
     /**
@@ -106,7 +118,7 @@ public class Boat {
      * If yes, it decreases the penaltyBar.
      */
     public void isBoatOutOfLane() {
-        if( PosX < leftBound || PosX > rightBound) {
+        if( posX < leftBound || posX > rightBound) {
             if (penaltyBar - 0.00000005 < 0) {
                 penaltyBar = 0;
             }else {
@@ -142,5 +154,96 @@ public class Boat {
         if (frame >= 2) {
             frame = 0;
         }
+    }
+
+    public void hasCollided(List<Boat> boats, Boat player) {
+        List<Boat> newBoats = new ArrayList<>(boats);
+        if (collisionBounds != player.collisionBounds) {
+            newBoats.remove(this);
+            if (collisionBounds.overlaps(player.collisionBounds)) {
+                if (health - 2 < 0){
+                    health = 0;
+                }else{
+                    health -= 2;
+                }
+            }
+        }
+        for (Boat enemyBoat : newBoats) {
+            if (collisionBounds.overlaps(enemyBoat.collisionBounds)) {
+                if (health - 2 < 0) {
+                    health = 0;
+                } else {
+                    health -= 2;
+                }
+            }
+        }
+    }
+
+    public int getTimePenalty() {
+        return timePenalty;
+    }
+
+    public void setTimePenalty(int timePenalty) {
+        this.timePenalty = timePenalty;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getPenaltyBar() {
+        return penaltyBar;
+    }
+
+    public void setPenaltyBar(int penaltyBar) {
+        this.penaltyBar = penaltyBar;
+    }
+
+    public int getFatigue() {
+        return fatigue;
+    }
+
+    public void setFatigue(int fatigue) {
+        this.fatigue = fatigue;
+    }
+
+    public int getPosX() {
+        return posX;
+    }
+
+    public void setPosX(int posX) {
+        this.posX = posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
+    public void setPosY(int posY) {
+        this.posY = posY;
+    }
+
+    public float getLeftBound() {
+        return leftBound;
+    }
+
+    public float getRightBound() {
+        return rightBound;
+    }
+
+    public int getFrame() {
+        return frame;
+    }
+
+    public boolean isHasNotLost() {
+        return !hasLost;
+    }
+
+    public void setHasLost(boolean hasLost) {
+        this.hasLost = hasLost;
     }
 }

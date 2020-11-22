@@ -60,9 +60,9 @@ public class WelcomeState extends State {
 	public void render(SpriteBatch sb) {
 		sb.begin();
 		sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
-		sb.draw(playBtn, (MainGame.WIDTH / 3) - (playBtn.getWidth() / 10), MainGame.HEIGHT / 50);
-		sb.draw(title, (MainGame.WIDTH / 5) - (title.getWidth() / 10), MainGame.HEIGHT / 50);
-		sb.draw(advance, (MainGame.WIDTH / 20) - (advance.getWidth() / 250), MainGame.HEIGHT / 50);
+		sb.draw(playBtn, ((float)MainGame.WIDTH / 3) - ((float) playBtn.getWidth() / 10), (float) MainGame.HEIGHT / 50);
+		sb.draw(title, ((float)MainGame.WIDTH / 5) - ((float)title.getWidth() / 10), (float)MainGame.HEIGHT / 50);
+		sb.draw(advance, ((float)MainGame.WIDTH / 20) - ((float) advance.getWidth() / 250), (float) MainGame.HEIGHT / 50);
 		sb.end();
 	}
 
