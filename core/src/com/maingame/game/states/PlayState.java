@@ -77,13 +77,17 @@ public class PlayState extends State{
         this.leg = leg;
         this.boats = boats;
         this.player = player;
+        cam.setToOrtho(false, (float) river.getWidth()*5,MainGame.HEIGHT);
         if (leg != 4){
-            cam.setToOrtho(false, (float) river.getWidth()*5,MainGame.HEIGHT);
             boats.get(0).setPosX(river.getWidth()/2-50);
             boats.get(1).setPosX(river.getWidth()/2 + river.getWidth()-50);
             player.setPosX(river.getWidth()/2 + (river.getWidth()*2)-50);
             boats.get(2).setPosX(river.getWidth()/2 + (river.getWidth()*3)-50);
             boats.get(3).setPosX(river.getWidth()/2 + (river.getWidth()*4)-50);
+        }else {
+            boats.get(0).setPosX(river.getWidth()/2-50);
+            player.setPosX(river.getWidth()/2 + (river.getWidth()*2)-50);
+            boats.get(1).setPosX(river.getWidth()/2 + (river.getWidth()*4)-50);
         }
         riverPos1 = 0;
         riverPos2 = river.getHeight();
@@ -106,12 +110,12 @@ public class PlayState extends State{
             time = System.currentTimeMillis();
         }
         if (Gdx.input.isKeyPressed(Input.Keys.W) || (Gdx.input.isKeyPressed(Input.Keys.UP))){
-            player.setPosY(player.getPosY() + player.acceleration);
-            cam.position.y += player.acceleration;
             if (player.getFatigue() -1 < 0){
                 player.setFatigue(0);
             }else {
+                player.setPosY(player.getPosY() + player.acceleration);
                 player.setFatigue((int) (player.getFatigue() - 0.00001));
+                cam.position.y += player.acceleration;
             }
 
         }
@@ -151,7 +155,7 @@ public class PlayState extends State{
             player.hasCollided(boats,player);
             checkBoatHealth();
             if ((System.currentTimeMillis() - countDown)/1000> 48 && finishLinePosition == 0) {
-                finishLinePosition = player.getPosY() + river.getHeight() +100;
+                finishLinePosition = getWinningBoat().getPosY() + river.getHeight() +100;
                 finishLineBounds = new Rectangle(0,finishLinePosition,finishLine.getWidth(),finishLine.getHeight());
             }
             finishLeg();
@@ -389,8 +393,31 @@ public class PlayState extends State{
      * checks if the leg is over and transitions to the leaderboard state.
      */
     private void finishLeg() {
-        if ((finishLineBounds != null) && (player.getPosY() > finishLinePosition +10)) {
-            gsm.set(new GameOverSpeed(gsm));
+        if (finishLineBounds != null){
+            for (Boat boat:boats) {
+                if (boat.getPosY() > finishLinePosition +10 && boat.isHasNotLost()) {
+                    if (boat.getTotalLegTime() == 0){
+                        boat.setTotalLegTime((int) (System.currentTimeMillis() - time)/1000);
+                    }
+                    boat.setPosY(finishLinePosition +10);
+                }
+            }
+            if (player.getPosY() > finishLinePosition +10) {
+                player.setPosY(finishLinePosition + 10);
+                cam.position.y -= player.speed;
+                if (player.getTotalLegTime() == 0) {
+                    player.setTotalLegTime((int) (System.currentTimeMillis() - time)/1000);
+                }
+                boolean haveBoatsFinished = true;
+                for (Boat boat:boats) {
+                    if (boat.getTotalLegTime() == 0 && boat.isHasNotLost()){
+                        haveBoatsFinished = false;
+                    }
+                }
+                if (haveBoatsFinished) {
+                    gsm.set(new LeaderboardState(gsm,leg,boats,player));
+                }
+            }
         }
     }
 
@@ -426,6 +453,39 @@ public class PlayState extends State{
             if (boat.isHasNotLost()) {
                 sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
             }
+        }else {
+            Boat boat = boats.get(0);
+            boat.setBounds(0,(float) river.getWidth()-50);
+            if (boat.isHasNotLost()) {
+                sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+            }
+            boat = player;
+            boat.setBounds((float) river.getWidth()*2-50,(float) river.getWidth()*3-50);
+            if (boat.isHasNotLost()) {
+                sb.draw(boat.images.get(boat.getFrame()),boat.getPosX(),boat.getPosY(),100,100);
+            }
+            boat = boats.get(1);
+            boat.setBounds((float) river.getWidth()*4-50,(float) river.getWidth()*5-50);
+            if (boat.isHasNotLost()) {
+                sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+            }
         }
+    }
+
+    private Boat getWinningBoat(){
+        Boat winningBoat = null;
+        for (Boat boat:boats) {
+            if (boat.isHasNotLost()) {
+                if (winningBoat == null) {
+                    winningBoat = boat;
+                }else if(winningBoat.getPosY() < boat.getPosY()) {
+                    winningBoat = boat;
+                }
+            }
+        }
+        if (winningBoat.getPosY() < player.getPosY()) {
+            winningBoat = player;
+        }
+        return winningBoat;
     }
 }

@@ -20,8 +20,14 @@ public class AI {
     public AI(Boat boat, int leg, List<Obstacle> obstacleList, List<Boat> boats, Boat player) {
         this.boat = boat;
         this.obstacleList = obstacleList;
-        if (leg == 0) {
+        if (leg == 1) {
             randomVariable = 0.3;
+        }else if (leg == 2) {
+            randomVariable = 0.2;
+        }else if (leg == 3){
+            randomVariable = 0.1;
+        }else {
+            randomVariable = 0;
         }
         farRightBox = new Rectangle((float) boat.getPosX() + 70,(float) boat.getPosY() +90,20,50);
         midRightBox = new Rectangle((float) boat.getPosX() + 50,(float) boat.getPosY() +90,20,50);

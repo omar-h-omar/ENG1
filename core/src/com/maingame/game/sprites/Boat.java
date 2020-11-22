@@ -17,6 +17,8 @@ public class Boat {
     public final int robustness;
     public final int acceleration;
     private int timePenalty;
+    private int totalLegTime;
+    private int cumulativeLegTime;
     private int health=100;
     private int penaltyBar = 100;
     private int fatigue = 300;
@@ -335,5 +337,33 @@ public class Boat {
      */
     public void setHasLost(boolean hasLost) {
         this.hasLost = hasLost;
+    }
+
+    /**
+     * Gets total leg time.
+     *
+     * @return the total leg time
+     */
+    public int getTotalLegTime() {
+        return totalLegTime;
+    }
+
+    /**
+     * Sets total leg time and cumulative leg time.
+     *
+     * @param totalLegTime the total leg time
+     */
+    public void setTotalLegTime(int totalLegTime) {
+        this.totalLegTime = totalLegTime + timePenalty;
+        this.cumulativeLegTime += totalLegTime;
+    }
+
+    /**
+     * Gets cumulative leg time.
+     *
+     * @return the cumulative leg time
+     */
+    public int getCumulativeLegTime() {
+        return cumulativeLegTime;
     }
 }

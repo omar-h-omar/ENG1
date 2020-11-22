@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.maingame.game.MainGame;
 
 /**
- * Shows a Game Over Screen for users who have hit too many obstacles and reached 0 health.
+ * Shows a Game Over Screen for users who were too slow and lost the three legs.
  * Users can then retry beating the game by clicking any key or any part of the screen.
  */
 
