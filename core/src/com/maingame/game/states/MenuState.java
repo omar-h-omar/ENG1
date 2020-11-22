@@ -23,12 +23,13 @@ public class MenuState extends State {
 	private final Texture playBtn;
 	private final Texture arrows;
 	private final Texture wasd;
-	private List<Boat> boats = new ArrayList<Boat>();
+	private List<Boat> boats = new ArrayList<>();
 	private int x; // current boat index
 	private final Rectangle rightBounds; // a rectangle around the right arrow used for detecting a click.
 	private final Rectangle leftBounds; // a rectangle around the left arrow used for detecting a click.
 	private final Rectangle btnBounds;
 	private final BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
+	private final Random generator = new Random();
 
 	public MenuState(GameStateManager gsm) {
 		super(gsm);
@@ -39,9 +40,9 @@ public class MenuState extends State {
 		arrows = new Texture("arrows.png");
 		wasd = new Texture("wasd.png");
 		this.buildBoats();
-		rightBounds = new Rectangle(350,MainGame.HEIGHT/2 + 50,200,200);
-		leftBounds = new Rectangle(50,MainGame.HEIGHT/2 + 50,200,200);
-		btnBounds = new Rectangle(MainGame.WIDTH - 300 - 100,0,300,300);
+		rightBounds = new Rectangle(350,(float) MainGame.HEIGHT/2 + 50,200,200);
+		leftBounds = new Rectangle(50,(float) MainGame.HEIGHT/2 + 50,200,200);
+		btnBounds = new Rectangle((float) MainGame.WIDTH - 300 - 100,0,300,300);
 		x = 0;
 	}
 
@@ -61,13 +62,11 @@ public class MenuState extends State {
 	/**
 	 * Generates a random list of enemy boats for the PlayState.
 	 * @see PlayState#PlayState(GameStateManager, List, Boat, int)
-	 * @param player the boat of the player.
 	 * @return a random list of enemy boats.
 	 */
-	private List<Boat> PlayStateBoats(Boat player) {
-		List<Boat> output = new ArrayList<Boat>();
+	private List<Boat> playStateBoats() {
+		List<Boat> output = new ArrayList<>();
 		for (int i = 0; i < 4; i++) {
-			Random generator = new Random();
 			Boat boat = this.boats.get(generator.nextInt(this.boats.size() - 1));
 			output.add(boat);
 			this.boats.remove(boat);
@@ -82,14 +81,14 @@ public class MenuState extends State {
 	@Override
 	public void handleInput() {
 		if (Gdx.input.justTouched()) {
-			if (rightBounds.contains(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY())){
+			if (rightBounds.contains(Gdx.input.getX(),(float) Gdx.graphics.getHeight() - Gdx.input.getY())){
 				x+= 1;
-			}else if (leftBounds.contains(Gdx.input.getX(),Gdx.graphics.getHeight() - Gdx.input.getY())){
+			}else if (leftBounds.contains(Gdx.input.getX(),(float) Gdx.graphics.getHeight() - Gdx.input.getY())){
 				x -= 1;
-			}else if (btnBounds.contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())){
+			}else if (btnBounds.contains(Gdx.input.getX(), (float) Gdx.graphics.getHeight() - Gdx.input.getY())){
 				Boat playerBoat = boats.get(x);
 				this.boats.remove(x);
-				this.boats = PlayStateBoats(playerBoat);
+				this.boats = playStateBoats();
 				gsm.set(new PlayState(gsm,boats, playerBoat,1));
 			}
 		}else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
@@ -99,7 +98,7 @@ public class MenuState extends State {
 		}else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))){
 			Boat playerBoat = boats.get(x);
 			this.boats.remove(x);
-			this.boats = PlayStateBoats(playerBoat);
+			this.boats = playStateBoats();
 			gsm.set(new PlayState(gsm,boats, playerBoat,1));
 		}
 		if (x < 0) {
@@ -128,9 +127,9 @@ public class MenuState extends State {
 		sb.begin();
 		sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
 		Texture img = boats.get(x).images.get(0);
-		sb.draw(img,200,MainGame.HEIGHT/2 + 50,200,200);
-		sb.draw(rightArrow,350 ,MainGame.HEIGHT/2 + 50,200,200);
-		sb.draw(leftArrow,50 ,MainGame.HEIGHT/2 + 50,200,200);
+		sb.draw(img,200,(float) MainGame.HEIGHT/2 + 50,200,200);
+		sb.draw(rightArrow,350 ,(float) MainGame.HEIGHT/2 + 50,200,200);
+		sb.draw(leftArrow,50 ,(float) MainGame.HEIGHT/2 + 50,200,200);
 		font.draw(sb,"Speed: ",100,300);
 		font.draw(sb,"Acceleration: ",100,250);
 		font.draw(sb,"Robustness: ",100,200);
@@ -139,10 +138,10 @@ public class MenuState extends State {
 		font.draw(sb,Integer.toString(boats.get(x).acceleration),550,250);
 		font.draw(sb,Integer.toString(boats.get(x).robustness),550,200);
 		font.draw(sb,Integer.toString(boats.get(x).maneuverability),550,150);
-		font.draw(sb,"Controls",MainGame.WIDTH - 350,600);
-		sb.draw(playBtn, MainGame.WIDTH - 300 - 100, 0, 300,300);
-		sb.draw(arrows,MainGame.WIDTH - 325,400,arrows.getWidth()/4,arrows.getHeight()/4);
-		sb.draw(wasd,MainGame.WIDTH - 325,250,arrows.getWidth()/4,arrows.getHeight()/4);
+		font.draw(sb,"Controls",(float) MainGame.WIDTH - 350,600);
+		sb.draw(playBtn, (float) MainGame.WIDTH - 300 - 100, 0, 300,300);
+		sb.draw(arrows,(float) MainGame.WIDTH - 325,400,(float) arrows.getWidth()/4,(float) arrows.getHeight()/4);
+		sb.draw(wasd,(float) MainGame.WIDTH - 325,250,(float) arrows.getWidth()/4,(float) arrows.getHeight()/4);
 		sb.end();
 	}
 

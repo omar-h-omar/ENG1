@@ -16,7 +16,7 @@ public class GameOverHealth extends State {
 	private final Texture background;
 	private final Texture gameOverBtn;
 	private final Texture info;
-	private long countDown;
+	private final long countDown;
 	
 
 	public GameOverHealth(GameStateManager gsm) {
@@ -51,7 +51,7 @@ public class GameOverHealth extends State {
 	 */
 	@Override
 	public void update(float dt) {
-		if ((System.currentTimeMillis() - countDown)/1000 > 0.1) {
+		if ((float)(System.currentTimeMillis() - countDown)/1000 > 0.2) {
 			handleInput();
 		}
 	}
@@ -66,8 +66,8 @@ public class GameOverHealth extends State {
 		cam.setToOrtho(false,MainGame.WIDTH,MainGame.HEIGHT);
 		sb.setProjectionMatrix(cam.combined);
 		sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
-		sb.draw(gameOverBtn, (MainGame.WIDTH / 3) - (gameOverBtn.getWidth() / 10), MainGame.HEIGHT / 4);
-		sb.draw(info, (MainGame.WIDTH / 3) - (info.getWidth() / 6), MainGame.HEIGHT / 20);
+		sb.draw(gameOverBtn, ((float) MainGame.WIDTH / 3) - ((float) gameOverBtn.getWidth() / 10), (float) MainGame.HEIGHT / 4);
+		sb.draw(info, ((float) MainGame.WIDTH / 3) - ((float) info.getWidth() / 6), (float) MainGame.HEIGHT / 20);
 		sb.end();
 	}
 

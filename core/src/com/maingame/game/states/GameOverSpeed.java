@@ -16,7 +16,7 @@ public class GameOverSpeed extends State {
 	private final Texture background;
 	private final Texture gameOverBtn;
 	private final Texture info;
-	private long countDown;
+	private final long countDown;
 
 	public GameOverSpeed(GameStateManager gsm) {
 		super(gsm);
@@ -48,7 +48,7 @@ public class GameOverSpeed extends State {
 	 */
 	@Override
 	public void update(float dt) {
-		if ((System.currentTimeMillis() - countDown)/1000 > 0.1) {
+		if ((float) (System.currentTimeMillis() - countDown)/1000 > 0.1) {
 			handleInput();
 		}
 	}
@@ -63,8 +63,8 @@ public class GameOverSpeed extends State {
 		cam.setToOrtho(false,MainGame.WIDTH,MainGame.HEIGHT);
 		sb.setProjectionMatrix(cam.combined);
 		sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
-		sb.draw(gameOverBtn, (MainGame.WIDTH / 3) - (gameOverBtn.getWidth() / 10), MainGame.HEIGHT / 4);
-		sb.draw(info, (MainGame.WIDTH / 3) - (info.getWidth() / 7), MainGame.HEIGHT / 10);
+		sb.draw(gameOverBtn, ((float) MainGame.WIDTH / 3) - ((float) gameOverBtn.getWidth() / 10), (float) MainGame.HEIGHT / 4);
+		sb.draw(info, ((float) MainGame.WIDTH / 3) - ((float) info.getWidth() / 7), (float) MainGame.HEIGHT / 10);
 		sb.end();
 	}
 
