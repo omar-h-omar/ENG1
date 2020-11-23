@@ -186,6 +186,13 @@ public class PlayState extends State{
             sb.draw(finishLine,0,finishLinePosition);
         }
         drawBoats(leg,sb);
+
+        // renders obstacles.
+        for (int i = 0; i < obstacleList.size() - 1; i++) {
+            Obstacle obstacle = obstacleList.get(i);
+            sb.draw(obstacle.img,obstacle.getPosX(),obstacle.getPosY(),70,70,0,0,obstacle.img.getWidth(),obstacle.img.getHeight(),obstacle.isDirection(),false);
+        }
+
         // Renders time and stat bars including health bar , fatigue bar, penalty bar.
         Texture pix2 = new Texture(fatigueMap2);
         Texture pix = new Texture(fatigueMap);
@@ -209,11 +216,6 @@ public class PlayState extends State{
             font.draw(sb,"Time: " + ((System.currentTimeMillis() - time)/1000 + player.getTimePenalty()) + "s" ,cam.position.x/2 - pix.getWidth() - 200,cam.position.y + 210);
         }
 
-        // renders obstacles.
-        for (int i = 0; i < obstacleList.size() - 1; i++) {
-            Obstacle obstacle = obstacleList.get(i);
-            sb.draw(obstacle.img,obstacle.getPosX(),obstacle.getPosY(),70,70,0,0,obstacle.img.getWidth(),obstacle.img.getHeight(),obstacle.isDirection(),false);
-        }
         // renders a countdown at the start of each leg.
         if ((System.currentTimeMillis() - countDown)/1000 < 3) {
             font.draw(sb,"Countdown: " + (3 - (System.currentTimeMillis() - countDown)/1000),cam.position.x - 170,cam.position.y+50);
