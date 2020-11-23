@@ -8,26 +8,30 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.maingame.game.MainGame;
 import com.maingame.game.sprites.Boat;
 
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 
+/**
+ * Shows a leaderboard with the boats ranked according to how much time they took.
+ */
 public class LeaderboardState extends State{
     private final Texture background;
-    private List<Boat> boatsInOrder;
+    private List<Boat> boatsInOrder; // A list of boats ordered by their total time in laps.
     private final BitmapFont font = new BitmapFont(Gdx.files.internal("font.fnt"),false); // a font to draw text
-    private Boat player;
-    private int leg;
+    private final Boat player;
+    private final int leg;
 
     public LeaderboardState(GameStateManager gsm, int leg, List<Boat> boats, Boat player) {
         super(gsm);
-        background = new Texture("background.PNG");
+        background = new Texture("background.png");
         this.player = player;
         this.leg = leg;
         buildBoatsInOrder(boats);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void handleInput() {
         if(Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)){
@@ -38,11 +42,19 @@ public class LeaderboardState extends State{
         }
     }
 
+    /**
+     * {@inheritDoc}
+     * @param dt the time between each start of a render()
+     */
     @Override
     public void update(float dt) {
         handleInput();
     }
 
+    /**
+     * {@inheritDoc}
+     * @param sb a batch for drawing objects
+     */
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
@@ -50,23 +62,31 @@ public class LeaderboardState extends State{
         sb.setProjectionMatrix(cam.combined);
         sb.draw(background, 0, 0, MainGame.WIDTH , MainGame.HEIGHT);
         if (leg != 4) {
-            font.draw(sb, "Leg " + leg +" Leaderboard",MainGame.WIDTH/2-250, 700);
+            font.draw(sb, "Leg " + leg +" Leaderboard",(float) MainGame.WIDTH/2-250, 700);
         }else {
-            font.draw(sb, "Final Leaderboard",MainGame.WIDTH/2-250, 700);
+            font.draw(sb, "Final Leaderboard",(float) MainGame.WIDTH/2-250, 700);
         }
         for (int i = 0; i < boatsInOrder.size(); i++){
-            sb.draw(boatsInOrder.get(i).images.get(0), MainGame.WIDTH/4 + 100,500 - (i * 120),125,125);
-            font.draw(sb,boatsInOrder.get(i).getCumulativeLegTime() + "s",MainGame.WIDTH/2 + 100,600  - (i * 120));
+            sb.draw(boatsInOrder.get(i).images.get(0), (float) MainGame.WIDTH/4 + 100,500 - (float) (i * 120),125,125);
+            font.draw(sb,boatsInOrder.get(i).getCumulativeLegTime() + "s",(float) MainGame.WIDTH/2 + 100,600  - (float)(i * 120));
         }
         sb.end();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void dispose() {
         background.dispose();
         font.dispose();
     }
 
+    /**
+     * Oragnises the boats using their time.
+     * @param boats a list of boats
+     * @see Boat#getCumulativeLegTime()
+     */
     private void buildBoatsInOrder(List<Boat> boats) {
         List<Boat> newList = new ArrayList<>(boats);
         newList.add(player);
@@ -74,12 +94,10 @@ public class LeaderboardState extends State{
         while (!newList.isEmpty()) {
             Boat highest = null;
             for (Boat boat:newList) {
+
                 if (highest == null) {
-                    if (boat.isHasNotLost()) {
-                        highest = boat;
-                    }
-                }
-                if (boat.isHasNotLost() && boat.getCumulativeLegTime() < highest.getCumulativeLegTime()) {
+                    highest = boat;
+                }else if (boat.getCumulativeLegTime() < highest.getCumulativeLegTime()) {
                     highest = boat;
                 }
             }
@@ -88,6 +106,11 @@ public class LeaderboardState extends State{
         }
     }
 
+    /**
+     * Transitions to a different state depending on the current leg
+     * @param leg the current leg
+     * @see GameStateManager#set(State)
+     */
     private void moveToNewState(int leg) {
         if (leg == 4) {
             gsm.set(new WelcomeState(gsm));
@@ -97,6 +120,7 @@ public class LeaderboardState extends State{
             for (Boat boat: boatsInOrder) {
                 if (boat == player) {
                     gameOver = false;
+                    break;
                 }
             }
             if (gameOver) {

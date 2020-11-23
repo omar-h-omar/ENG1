@@ -33,7 +33,7 @@ public class MenuState extends State {
 
 	public MenuState(GameStateManager gsm) {
 		super(gsm);
-		background = new Texture("background.PNG");
+		background = new Texture("background.png");
 		leftArrow = new Texture("leftArrow.png");
 		rightArrow = new Texture("rightArrow.png");
 		playBtn = new Texture("play.png");

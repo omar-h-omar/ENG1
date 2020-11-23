@@ -20,7 +20,7 @@ public class GameOverSpeed extends State {
 
 	public GameOverSpeed(GameStateManager gsm) {
 		super(gsm);
-		background = new Texture("background.PNG");
+		background = new Texture("background.png");
 		gameOverBtn = new Texture("gameover.png");
 		info = new Texture("gameoverspeed.png");
 		countDown = System.currentTimeMillis();

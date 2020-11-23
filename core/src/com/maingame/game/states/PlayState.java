@@ -41,7 +41,7 @@ public class PlayState extends State{
     private final Pixmap penaltyMap; // a map to render the penalty bar.
     private final Pixmap penaltyMap2; // a map to render the penalty bar background.
     private final List<Obstacle> obstacleList = new ArrayList<>(); // a list containing all the obstacles.
-    private Rectangle finishLineBounds;
+    private Rectangle finishLineBounds; // a box to detect when a boat reaches the finish line.
     private final Random generator = new Random();
     private static final String GREEN = "345830";
     private static final String WHITE = "eeeded";
@@ -227,10 +227,17 @@ public class PlayState extends State{
     @Override
     public void dispose() {
         river.dispose();
+        riverReversed.dispose();
         font.dispose();
         for (Obstacle obstacle : obstacleList) {
             obstacle.img.dispose();
         }
+        fatigueMap.dispose();
+        fatigueMap2.dispose();
+        healthMap.dispose();
+        healthMap2.dispose();
+        penaltyMap.dispose();
+        penaltyMap2.dispose();
     }
 
     /**
@@ -415,7 +422,16 @@ public class PlayState extends State{
                     }
                 }
                 if (haveBoatsFinished) {
-                    gsm.set(new LeaderboardState(gsm,leg,boats,player));
+                    List<Boat> newList = new ArrayList<>();
+                    for (Boat boat:boats) {
+                        if (boat.isHasNotLost()){
+                            newList.add(boat);
+                        }else {
+                            boat.images.get(0).dispose();
+                            boat.images.get(1).dispose();
+                        }
+                    }
+                    gsm.set(new LeaderboardState(gsm,leg,newList,player));
                 }
             }
         }
@@ -472,15 +488,15 @@ public class PlayState extends State{
         }
     }
 
+    /**
+     * Returns the boat currently in first position
+     * @return thw winning boat
+     */
     private Boat getWinningBoat(){
-        Boat winningBoat = null;
+        Boat winningBoat = boats.get(0);
         for (Boat boat:boats) {
-            if (boat.isHasNotLost()) {
-                if (winningBoat == null) {
-                    winningBoat = boat;
-                }else if(winningBoat.getPosY() < boat.getPosY()) {
-                    winningBoat = boat;
-                }
+            if (boat.isHasNotLost() && winningBoat.getPosY() < boat.getPosY()) {
+                winningBoat = boat;
             }
         }
         if (winningBoat.getPosY() < player.getPosY()) {

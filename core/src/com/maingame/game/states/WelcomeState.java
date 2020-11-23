@@ -19,10 +19,10 @@ public class WelcomeState extends State {
 
 	public WelcomeState(GameStateManager gsm) {
 		super(gsm);
-		background = new Texture("background.PNG");
-		playBtn = new Texture("play.PNG");
-		title = new Texture("title.PNG");
-		advance = new Texture("advance.PNG");
+		background = new Texture("background.png");
+		playBtn = new Texture("play.png");
+		title = new Texture("title.png");
+		advance = new Texture("advance.png");
 	}
 
 	/**
