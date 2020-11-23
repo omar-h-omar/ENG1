@@ -91,9 +91,9 @@ public class MenuState extends State {
 				this.boats = playStateBoats();
 				gsm.set(new PlayState(gsm,boats, playerBoat,1));
 			}
-		}else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+		}else if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT) || (Gdx.input.isKeyJustPressed(Input.Keys.D))){
 			x += 1;
-		}else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+		}else if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT) || (Gdx.input.isKeyJustPressed(Input.Keys.A))) {
 			x -= 1;
 		}else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) || (Gdx.input.isKeyJustPressed(Input.Keys.SPACE))){
 			Boat playerBoat = boats.get(x);
