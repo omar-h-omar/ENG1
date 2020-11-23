@@ -133,7 +133,7 @@ public class MenuState extends State {
 		font.draw(sb,"Speed: ",100,300);
 		font.draw(sb,"Acceleration: ",100,250);
 		font.draw(sb,"Robustness: ",100,200);
-		font.draw(sb,"maneuverability: ",100,150);
+		font.draw(sb,"Maneuverability: ",100,150);
 		font.draw(sb,Integer.toString(boats.get(x).speed),550,300);
 		font.draw(sb,Integer.toString(boats.get(x).acceleration),550,250);
 		font.draw(sb,Integer.toString(boats.get(x).robustness),550,200);

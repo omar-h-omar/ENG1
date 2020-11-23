@@ -126,6 +126,7 @@ public class LeaderboardState extends State{
             if (gameOver) {
                 gsm.set(new GameOverSpeed(gsm));
             }else {
+                // resets the boat attributes
                 for (Boat boat:boatsInOrder) {
                     boat.setPosY(0);
                     boat.setHealth(100);
@@ -136,6 +137,7 @@ public class LeaderboardState extends State{
                 gsm.set(new PlayState(gsm,boatsInOrder,player,leg + 1));
             }
         }else {
+            // resets the boat attributes
             for (Boat boat:boatsInOrder) {
                 boat.setPosY(0);
                 boat.setHealth(100);
