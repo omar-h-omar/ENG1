@@ -79,11 +79,15 @@ public class PlayState extends State{
         this.player = player;
         cam.setToOrtho(false, (float) river.getWidth()*5,MainGame.HEIGHT);
         if (leg != 4){
-            boats.get(0).setPosX(river.getWidth()/2-50);
-            boats.get(1).setPosX(river.getWidth()/2 + river.getWidth()-50);
-            player.setPosX(river.getWidth()/2 + (river.getWidth()*2)-50);
-            boats.get(2).setPosX(river.getWidth()/2 + (river.getWidth()*3)-50);
-            boats.get(3).setPosX(river.getWidth()/2 + (river.getWidth()*4)-50);
+            try{
+                boats.get(0).setPosX(river.getWidth()/2-50);
+                boats.get(1).setPosX(river.getWidth()/2 + river.getWidth()-50);
+                player.setPosX(river.getWidth()/2 + (river.getWidth()*2)-50);
+                boats.get(2).setPosX(river.getWidth()/2 + (river.getWidth()*3)-50);
+                boats.get(3).setPosX(river.getWidth()/2 + (river.getWidth()*4)-50);
+            }catch (Exception e){
+
+            }
         }else {
             boats.get(0).setPosX(river.getWidth()/2-50);
             player.setPosX(river.getWidth()/2 + (river.getWidth()*2)-50);
@@ -445,48 +449,52 @@ public class PlayState extends State{
      * @param sb the spritebatch used for rendering
      */
     private void drawBoats(int leg,SpriteBatch sb) {
-        if (leg != 4) {
-            Boat boat = boats.get(0);
-            boat.setBounds(0,(float) river.getWidth()-50);
-            if (boat.isHasNotLost()) {
-                sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+        try{
+            if (leg != 4) {
+                Boat boat = boats.get(0);
+                boat.setBounds(0,(float) river.getWidth()-50);
+                if (boat.isHasNotLost()) {
+                    sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+                }
+                boat = boats.get(1);
+                boat.setBounds((float) river.getWidth()-50,(float) river.getWidth()*2-50);
+                if (boat.isHasNotLost()) {
+                    sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+                }
+                boat = player;
+                boat.setBounds((float) river.getWidth()*2-50,(float) river.getWidth()*3-50);
+                if (boat.isHasNotLost()) {
+                    sb.draw(boat.images.get(boat.getFrame()),boat.getPosX(),boat.getPosY(),100,100);
+                }
+                boat = boats.get(2);
+                boat.setBounds((float) river.getWidth()*3-50,(float) river.getWidth()*4-50);
+                if (boat.isHasNotLost()) {
+                    sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+                }
+                boat = boats.get(3);
+                boat.setBounds((float) river.getWidth()*4-50,(float) river.getWidth()*5-50);
+                if (boat.isHasNotLost()) {
+                    sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+                }
+            }else {
+                Boat boat = boats.get(0);
+                boat.setBounds(0,(float) river.getWidth()-50);
+                if (boat.isHasNotLost()) {
+                    sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+                }
+                boat = player;
+                boat.setBounds((float) river.getWidth()*2-50,(float) river.getWidth()*3-50);
+                if (boat.isHasNotLost()) {
+                    sb.draw(boat.images.get(boat.getFrame()),boat.getPosX(),boat.getPosY(),100,100);
+                }
+                boat = boats.get(1);
+                boat.setBounds((float) river.getWidth()*4-50,(float) river.getWidth()*5-50);
+                if (boat.isHasNotLost()) {
+                    sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
+                }
             }
-            boat = boats.get(1);
-            boat.setBounds((float) river.getWidth()-50,(float) river.getWidth()*2-50);
-            if (boat.isHasNotLost()) {
-                sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
-            }
-            boat = player;
-            boat.setBounds((float) river.getWidth()*2-50,(float) river.getWidth()*3-50);
-            if (boat.isHasNotLost()) {
-                sb.draw(boat.images.get(boat.getFrame()),boat.getPosX(),boat.getPosY(),100,100);
-            }
-            boat = boats.get(2);
-            boat.setBounds((float) river.getWidth()*3-50,(float) river.getWidth()*4-50);
-            if (boat.isHasNotLost()) {
-                sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
-            }
-            boat = boats.get(3);
-            boat.setBounds((float) river.getWidth()*4-50,(float) river.getWidth()*5-50);
-            if (boat.isHasNotLost()) {
-                sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
-            }
-        }else {
-            Boat boat = boats.get(0);
-            boat.setBounds(0,(float) river.getWidth()-50);
-            if (boat.isHasNotLost()) {
-                sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
-            }
-            boat = player;
-            boat.setBounds((float) river.getWidth()*2-50,(float) river.getWidth()*3-50);
-            if (boat.isHasNotLost()) {
-                sb.draw(boat.images.get(boat.getFrame()),boat.getPosX(),boat.getPosY(),100,100);
-            }
-            boat = boats.get(1);
-            boat.setBounds((float) river.getWidth()*4-50,(float) river.getWidth()*5-50);
-            if (boat.isHasNotLost()) {
-                sb.draw(boat.images.get(boat.getFrame()), boat.getPosX(),boat.getPosY(),100,100);
-            }
+        }catch (Exception e){
+
         }
     }
 
