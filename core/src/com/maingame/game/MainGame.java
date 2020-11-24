@@ -2,6 +2,7 @@ package com.maingame.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.maingame.game.states.GameStateManager;
@@ -13,6 +14,7 @@ public class MainGame extends ApplicationAdapter {
 	public static final String TITLE = "Dragonite Dragon Boat Race";
 	private GameStateManager gsm;
 	private SpriteBatch batch;
+	private Music music;
 
 	/**
 	 * {@inheritDoc}
@@ -23,6 +25,10 @@ public class MainGame extends ApplicationAdapter {
 	public void create () {
 		batch = new SpriteBatch();
 		gsm = new GameStateManager();
+		music = Gdx.audio.newMusic(Gdx.files.internal("game3.mp3"));
+		music.setLooping(true);
+		music.setVolume(0.1f);
+		music.play();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		gsm.push(new WelcomeState(gsm));
 	}
